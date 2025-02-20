@@ -23,18 +23,21 @@ export interface InlineNote {
 }
 
 export interface MultiSystemSection {
+  type: "MultiSystemSection";
   attributes: SectionAttributes;
-  systems: System[];
+  segments: (System | MultiSystemSection)[];
 }
 
 export interface System {
+  type: "System";
   bars: Bar[];
-  sections: InlineSection[];
-  inlineNotes: InlineNote;
+  // sections: InlineSection[];
+  // inlineNotes: InlineNote[];
 }
 
 export interface Diagram {
-  systems: System[];
+  type: "Diagram";
+  segments: (System | MultiSystemSection)[];
 }
 
 // internal type as a step in calculating what should be a system section and what should be an inline section
@@ -102,7 +105,7 @@ function isBarLastInSection(section: Section, barNumber: number) {
 const findStartElement = findElementFactory(isBarFirstInSection);
 const findEndElement = findElementFactory(isBarLastInSection);
 
-export function createMusicDiagramAst(doc: MusicDiagramDocument) {
+function createBarsWithSections(doc: MusicDiagramDocument) {
   let length = doc.length;
   doc.sections.forEach(({ end }) => {
     if (end > length) length = end;
@@ -167,4 +170,59 @@ export function createMusicDiagramAst(doc: MusicDiagramDocument) {
   }
 
   return rootSection.elements;
+}
+
+const maxBarsInSystem = 8; // todo: we might want to make this customizable eventually
+
+function createEmptySystem(): System {
+  return {
+    type: "System",
+    bars: [],
+  };
+}
+
+export function createMusicDiagramAst(doc: MusicDiagramDocument): Diagram {
+  function createSegments(elements: (Section | Bar)[]) {
+    let currentSystem = createEmptySystem();
+    const segments: (MultiSystemSection | System)[] = [];
+
+    function pushSystem() {
+      segments.push(currentSystem);
+      currentSystem = createEmptySystem();
+    }
+
+    for (const element of elements) {
+      if (element.type === "Bar") {
+        const bar = element;
+        currentSystem.bars.push(bar);
+
+        if (currentSystem.bars.length >= maxBarsInSystem) {
+          pushSystem();
+        }
+      } else if (element.type === "Section") {
+        const section = element;
+
+        if (currentSystem.bars.length) {
+          pushSystem();
+        }
+
+        segments.push({
+          type: "MultiSystemSection",
+          attributes: section.attributes,
+          segments: createSegments(section.elements),
+        });
+      }
+    }
+
+    if (currentSystem.bars.length) {
+      pushSystem();
+    }
+
+    return segments;
+  }
+
+  return {
+    type: "Diagram",
+    segments: createSegments(createBarsWithSections(doc)),
+  };
 }
