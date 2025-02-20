@@ -1,13 +1,15 @@
 import { create } from "zustand";
-import { combine } from "zustand/middleware";
+import { combine, devtools } from "zustand/middleware";
 
 export const useStore = create(
-  combine(
-    {
-      selectedBar: /*null*/ 1 as number | null,
-    },
-    (set) => ({
-      setSelectedBar: (bar: number) => set({ selectedBar: bar }),
-    }),
+  devtools(
+    combine(
+      {
+        selectedBar: null as number | null,
+      },
+      (set) => ({
+        setSelectedBar: (bar: number) => set({ selectedBar: bar }),
+      }),
+    ),
   ),
 );
