@@ -1,6 +1,8 @@
+import { Color } from "@/app/colors";
+
 export interface SectionAttributes {
   name?: string;
-  color?: string;
+  color?: Color;
 }
 
 interface Section {

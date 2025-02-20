@@ -3,7 +3,7 @@ import Bar from "@/app/components/Bar";
 
 export function System(props: SystemProps) {
   return (
-    <div className="mb-2 border border-gray-900">
+    <div className="col-span-full grid grid-cols-subgrid">
       {props.bars.map((bars) => {
         return <Bar {...bars} />;
       })}

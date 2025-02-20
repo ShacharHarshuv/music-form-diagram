@@ -35,7 +35,9 @@ export function App() {
   return (
     <div className="mx-auto mt-5 max-w-screen-md p-4">
       <h1 className="mb-3 text-3xl font-bold">{diagram.title}</h1>
-      <SystemSegments segments={diagramAst.segments} />
+      <div className="grid grid-cols-8 gap-y-3">
+        <SystemSegments segments={diagramAst.segments} />
+      </div>
     </div>
   );
 }

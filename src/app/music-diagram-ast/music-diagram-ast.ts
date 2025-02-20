@@ -2,7 +2,7 @@ import {
   SectionAttributes,
   MusicDiagramDocument,
 } from "@/app/music-diagram-document/music-diagram-document";
-import { sortBy } from "lodash";
+import { sortBy, max } from "lodash";
 
 export interface Bar {
   type: "Bar";
@@ -24,6 +24,7 @@ export interface InlineNote {
 
 export interface MultiSystemSection {
   type: "MultiSystemSection";
+  paddingLevel: number;
   attributes: SectionAttributes;
   segments: SystemSegment[];
 }
@@ -209,6 +210,7 @@ export function createMusicDiagramAst(doc: MusicDiagramDocument): Diagram {
         }
 
         segments.push({
+          paddingLevel: 0,
           type: "MultiSystemSection",
           attributes: section.attributes,
           segments: createSegments(section.elements),
@@ -223,8 +225,31 @@ export function createMusicDiagramAst(doc: MusicDiagramDocument): Diagram {
     return segments;
   }
 
+  const segments = createSegments(createBarsWithSections(doc));
+
+  // set MultiSystemSection paddingLevel
+  function setPaddingLevels(segments: SystemSegment[]): number {
+    return (
+      max(
+        segments.map((s) => {
+          if (s.type === "System") {
+            return 0;
+          }
+
+          const paddingLevel = setPaddingLevels(s.segments) + 1;
+
+          s.paddingLevel = paddingLevel;
+
+          return paddingLevel;
+        }),
+      ) ?? 0
+    );
+  }
+
+  setPaddingLevels(segments);
+
   return {
     type: "Diagram",
-    segments: createSegments(createBarsWithSections(doc)),
+    segments,
   };
 }
