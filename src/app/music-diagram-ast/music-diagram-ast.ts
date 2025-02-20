@@ -25,7 +25,7 @@ export interface InlineNote {
 export interface MultiSystemSection {
   type: "MultiSystemSection";
   attributes: SectionAttributes;
-  segments: (System | MultiSystemSection)[];
+  segments: SystemSegment[];
 }
 
 export interface System {
@@ -35,9 +35,11 @@ export interface System {
   // inlineNotes: InlineNote[];
 }
 
+export type SystemSegment = System | MultiSystemSection;
+
 export interface Diagram {
   type: "Diagram";
-  segments: (System | MultiSystemSection)[];
+  segments: SystemSegment[];
 }
 
 // internal type as a step in calculating what should be a system section and what should be an inline section
