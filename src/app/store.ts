@@ -5,10 +5,19 @@ export const useStore = create(
   devtools(
     combine(
       {
-        selectedBar: null as number | null,
+        selectedBarsStart: /*null*/ 1 as number | null,
+        selectedBarsEnd: /*null*/ 3 as number | null,
       },
-      (set) => ({
-        setSelectedBar: (bar: number) => set({ selectedBar: bar }),
+      (set, get) => ({
+        setSelectedBarsStart: (bar: number) => {
+          set({ selectedBarsStart: bar, selectedBarsEnd: bar });
+        },
+        setSelectedBarsEnd: (bar: number) => {
+          set({ selectedBarsEnd: bar });
+          if (!get().selectedBarsStart) {
+            set({ selectedBarsStart: bar });
+          }
+        },
       }),
     ),
   ),
