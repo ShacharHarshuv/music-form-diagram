@@ -9,12 +9,12 @@ export default function SystemSegments({
 }) {
   return (
     <>
-      {segments.map((segment) => {
+      {segments.map((segment, index) => {
         switch (segment.type) {
           case "System":
-            return <System {...segment} />;
+            return <System {...segment} key={index} />;
           case "MultiSystemSection":
-            return <MultiSystemSection {...segment} />;
+            return <MultiSystemSection {...segment} key={index} />;
         }
       })}
     </>
