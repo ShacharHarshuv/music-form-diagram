@@ -13,7 +13,7 @@ export default function MultiSystemSection(props: MultiSystemSectionProps) {
           color,
         }}
       >
-        Section {props.attributes.name}
+        {props.attributes.name}
       </h2>
       <div
         className="col-span-full grid grid-cols-subgrid gap-y-3 rounded-xl border-2 px-2 py-3"

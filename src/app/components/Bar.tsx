@@ -20,8 +20,10 @@ export default function Bar(props: BarProps) {
   return (
     <span
       className={clsx(
-        "inline-block h-8 cursor-pointer select-none border-r border-gray-300 bg-gray-50 px-2 hover:bg-gray-100",
-        isSelected && "bg-gray-200 hover:bg-gray-300",
+        "inline-block h-8 cursor-pointer select-none border-r border-gray-300 px-2",
+        isSelected
+          ? "bg-gray-200 hover:bg-gray-300"
+          : "bg-gray-50 hover:bg-gray-100",
       )}
       onMouseDown={(event) => {
         event.shiftKey ? selectBarEnd() : selectBarStart();
