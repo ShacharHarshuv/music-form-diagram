@@ -1,11 +1,10 @@
 import { createMusicDiagramAst } from "@/app/music-diagram-ast/music-diagram-ast";
 import { MusicDiagramDocument } from "@/app/music-diagram-document/music-diagram-document";
-import { Omit } from "yargs";
-import exp from "node:constants";
 
 function expectNotToThrow(
   name: string,
-  input: Omit<MusicDiagramDocument, "title" | "sections">,
+  input: Omit<MusicDiagramDocument, "title" | "sections"> &
+    Partial<MusicDiagramDocument>,
 ) {
   test(name, () => {
     expect(() =>
