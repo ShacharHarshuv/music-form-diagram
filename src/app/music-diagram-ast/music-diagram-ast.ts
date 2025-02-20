@@ -2,6 +2,7 @@ import {
   SectionAttributes,
   MusicDiagramDocument,
 } from "@/app/music-diagram-document/music-diagram-document";
+import { sortBy } from "lodash";
 
 export interface Bar {
   type: "Bar";
@@ -36,9 +37,19 @@ export interface Diagram {
   systems: System[];
 }
 
+// internal type as a step in calculating what should be a system section and what should be an inline section
 interface Section {
   type: "Section";
+  attributes: SectionAttributes;
   elements: (Bar | Section)[];
+}
+
+function getElementNameForDebugging(element: Section | Bar) {
+  if (element.type === "Bar") {
+    return `Bar[${element.index}]`;
+  } else {
+    return `Section[${element.attributes.name}]`;
+  }
 }
 
 function findElementFactory(
@@ -48,12 +59,13 @@ function findElementFactory(
   ) => boolean,
 ) {
   return function findElement(
-    elements: (Bar | Section)[],
+    section: Section,
     barNumber: number,
   ): {
-    container: (Bar | Section)[];
+    parent: Section;
     index: number;
   } | null {
+    const { elements } = section;
     for (let i = 0; i < elements.length; i++) {
       const element = elements[i];
 
@@ -63,11 +75,11 @@ function findElementFactory(
           isSectionTheOneWeAreLookingFor(element, barNumber))
       ) {
         return {
-          container: elements,
+          parent: section,
           index: i,
         };
       } else if (element.type === "Section") {
-        const maybeElement = findElement(element.elements, barNumber);
+        const maybeElement = findElement(element, barNumber);
         if (maybeElement) return maybeElement;
       }
     }
@@ -101,34 +113,58 @@ export function createMusicDiagramAst(doc: MusicDiagramDocument) {
     index: i,
   }));
 
-  const elements: (Bar | Section)[] = [...bars];
+  const rootSection: Section = {
+    type: "Section",
+    attributes: {
+      name: "root", // for debugging only
+    },
+    elements: [...bars],
+  };
 
-  for (const section of doc.sections) {
-    const start = findStartElement(elements, section.start);
-    const end = findEndElement(elements, section.end);
+  // building the sections from smallest to biggest avoids issues where it's hard to understand which is the common container of two bar indices
+  for (const section of sortBy(doc.sections, ({ start, end }) => end - start)) {
+    const start = findStartElement(rootSection, section.start);
+    const end = findEndElement(rootSection, section.end);
 
     if (!start) {
-      throw new Error(`Invalid start bar number ${section.start}`);
+      throw new Error(
+        `Invalid start bar number ${section.start} for ${section.attributes.name}`,
+      );
     }
     if (!end) {
-      throw new Error(`Invalid end bar number ${section.end}`);
+      throw new Error(
+        `Invalid end bar number ${section.end} for ${section.attributes.name}`,
+      );
     }
 
-    if (!start || !end || start.container !== end.container) {
-      console.log(section);
-      console.log(start, end);
-      throw new Error("Invalid section");
+    if (!start) {
+      throw new Error(`Couldn't find start of ${section.attributes.name}`);
     }
 
-    const { container } = start;
+    if (!end) {
+      throw new Error(`Couldn't find end of ${section.attributes.name}`);
+    }
+
+    if (start.parent !== end.parent) {
+      throw new Error(
+        `Start and end parent of ${section.attributes.name} are different! start.parent=${getElementNameForDebugging(start.parent)}, end.parent=${getElementNameForDebugging(end.parent)}`,
+      );
+    }
+
+    const { parent } = start;
 
     const sectionElement: Section = {
       type: "Section",
-      elements: container.slice(start.index, end.index + 1),
+      attributes: section.attributes,
+      elements: parent.elements.slice(start.index, end.index + 1),
     };
 
-    container.splice(start.index, end.index - start.index + 1, sectionElement);
+    parent.elements.splice(
+      start.index,
+      end.index - start.index + 1,
+      sectionElement,
+    );
   }
 
-  return elements;
+  return rootSection.elements;
 }

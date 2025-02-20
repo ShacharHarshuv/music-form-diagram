@@ -11,7 +11,7 @@ export function App() {
     sections: [
       {
         start: 0,
-        end: 4,
+        end: 3,
         attributes: {
           name: "A",
           color: "red",
@@ -19,10 +19,9 @@ export function App() {
       },
       {
         start: 0,
-        end: 2,
+        end: 1,
         attributes: {
-          name: "A",
-          color: "red",
+          name: "inner",
         },
       },
     ],
