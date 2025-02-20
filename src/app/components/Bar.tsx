@@ -8,7 +8,10 @@ export default function Bar(props: BarProps) {
     if (selectedBarsStart === null || selectedBarsEnd === null) {
       return false;
     }
-    const [min, max] = [selectedBarsStart, selectedBarsEnd].sort();
+    const [min, max] =
+      selectedBarsStart <= selectedBarsEnd
+        ? [selectedBarsStart, selectedBarsEnd]
+        : [selectedBarsEnd, selectedBarsStart];
     return props.index >= min && props.index <= max;
   });
   const selectBarStart = useSelectBar(props.index, "setSelectedBarsStart");

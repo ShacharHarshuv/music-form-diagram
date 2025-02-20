@@ -5,8 +5,8 @@ export const useStore = create(
   devtools(
     combine(
       {
-        selectedBarsStart: /*null*/ 1 as number | null,
-        selectedBarsEnd: /*null*/ 3 as number | null,
+        selectedBarsStart: null as number | null,
+        selectedBarsEnd: null as number | null,
       },
       (set, get) => ({
         setSelectedBarsStart: (bar: number) => {
@@ -14,7 +14,7 @@ export const useStore = create(
         },
         setSelectedBarsEnd: (bar: number) => {
           set({ selectedBarsEnd: bar });
-          if (!get().selectedBarsStart) {
+          if (get().selectedBarsStart === null) {
             set({ selectedBarsStart: bar });
           }
         },
