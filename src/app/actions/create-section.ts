@@ -1,8 +1,9 @@
 import { createAction } from "@/app/actions/action";
 
-export const createSection = createAction(
-  "Create New Section",
-  (current, update) => {
+export const createSection = createAction({
+  description: "Create New Section",
+  hotkey: "s",
+  perform: (current, update) => {
     const { selectedBarsStart, selectedBarsEnd } = current;
     if (selectedBarsStart === null || selectedBarsEnd === null) {
       console.warn("Tried to create section with no selected bars");
@@ -42,4 +43,4 @@ export const createSection = createAction(
       });
     });
   },
-);
+});

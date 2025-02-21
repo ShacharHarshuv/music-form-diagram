@@ -1,20 +1,35 @@
 import { StoreValue, useStore } from "@/app/store";
 import { produce } from "immer";
+import hotkeys from "hotkeys-js";
 
-export function createAction(
-  description: string,
-  callback: (
+export function createAction({
+  description,
+  hotkey,
+  perform,
+}: {
+  description: string;
+  hotkey?: string;
+  perform: (
     current: StoreValue,
     update: (updater: (current: StoreValue) => void) => void,
-  ) => void,
-) {
-  return Object.assign(
+  ) => void;
+}) {
+  const action = Object.assign(
     () => {
       const current = useStore.getState();
-      callback(current, (updater) => {
+      perform(current, (updater) => {
         useStore.setState(produce(updater));
       });
     },
-    { description },
+    {
+      description,
+      register: () => {
+        if (hotkey) {
+          hotkeys(hotkey, action);
+        }
+      },
+    },
   );
+
+  return action;
 }
