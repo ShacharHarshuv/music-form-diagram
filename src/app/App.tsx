@@ -1,12 +1,10 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import { createMusicDiagramAst } from "@/app/music-diagram-ast/music-diagram-ast";
 import SystemSegments from "@/app/components/system-segments";
-import { useStore } from "@/app/store";
+import { useStore } from "@/app/store/store";
 import { actions } from "@/app/actions/actions";
-
-actions.forEach((action) => action.register());
 
 export function App() {
   const diagramDocument = useStore((state) => state.document);
@@ -14,6 +12,10 @@ export function App() {
   const diagramAst = useMemo(() => {
     return createMusicDiagramAst(diagramDocument);
   }, [diagramDocument]);
+
+  useEffect(() => {
+    actions.forEach((action) => action.register());
+  }, []);
 
   return (
     <div className="mx-auto mt-5 max-w-screen-md p-4">

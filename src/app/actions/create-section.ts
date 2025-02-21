@@ -1,21 +1,21 @@
 import { createAction } from "@/app/actions/action";
+import { selectedRange } from "@/app/store/selected-range";
+import { current } from "@/app/store/current";
+import { mutateStore } from "@/app/store/mutate-store";
 
 export const createSection = createAction({
   description: "Create New Section",
   hotkey: "s",
-  perform: (current, update) => {
-    const { selectedBarsStart, selectedBarsEnd } = current;
-    if (selectedBarsStart === null || selectedBarsEnd === null) {
+  perform: () => {
+    const range = selectedRange();
+    if (!range) {
       console.warn("Tried to create section with no selected bars");
       return;
     }
 
-    const [start, end] =
-      selectedBarsStart <= selectedBarsEnd
-        ? [selectedBarsStart, selectedBarsEnd]
-        : [selectedBarsEnd, selectedBarsStart];
+    const [start, end] = range;
 
-    const isValid = current.document.sections.every((section) => {
+    const isValid = current().document.sections.every((section) => {
       const isOK =
         (section.start <= start && end <= section.end) ||
         (start <= section.start && section.end <= end) ||
@@ -35,7 +35,7 @@ export const createSection = createAction({
       return;
     }
 
-    update(({ document }) => {
+    mutateStore(({ document }) => {
       document.sections.push({
         start,
         end,

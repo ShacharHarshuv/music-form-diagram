@@ -1,21 +1,18 @@
 import { Bar as BarProps } from "@/app/music-diagram-ast/music-diagram-ast";
-import { useStore } from "@/app/store";
-import { useMemo } from "react";
+import { useStore } from "@/app/store/store";
 import clsx from "clsx";
+import { selectedRange } from "@/app/store/selected-range";
+import { mutateStore } from "@/app/store/mutate-store";
 
 export default function Bar(props: BarProps) {
-  const isSelected = useStore(({ selectedBarsStart, selectedBarsEnd }) => {
-    if (selectedBarsStart === null || selectedBarsEnd === null) {
+  const isSelected = useStore(() => {
+    const range = selectedRange();
+    if (!range) {
       return false;
     }
-    const [min, max] =
-      selectedBarsStart <= selectedBarsEnd
-        ? [selectedBarsStart, selectedBarsEnd]
-        : [selectedBarsEnd, selectedBarsStart];
+    const [min, max] = range;
     return props.index >= min && props.index <= max;
   });
-  const selectBarStart = useSelectBar(props.index, "setSelectedBarsStart");
-  const selectBarEnd = useSelectBar(props.index, "setSelectedBarsEnd");
 
   return (
     <span
@@ -26,7 +23,7 @@ export default function Bar(props: BarProps) {
           : "bg-gray-50 hover:bg-gray-100",
       )}
       onMouseDown={(event) => {
-        event.shiftKey ? selectBarEnd() : selectBarStart();
+        event.shiftKey ? setEnd(props.index) : setStart(props.index);
       }}
     >
       <span
@@ -41,15 +38,19 @@ export default function Bar(props: BarProps) {
   );
 }
 
-function useSelectBar(
-  index: number,
-  updateFnKey: "setSelectedBarsStart" | "setSelectedBarsEnd",
-) {
-  const setSelectedBar = useStore((state) => state[updateFnKey]);
-  return useMemo(
-    () => () => {
-      setSelectedBar(index);
-    },
-    [setSelectedBar, index],
-  );
+function setStart(start: number) {
+  mutateStore(({ selection }) => {
+    selection.start = start;
+    selection.end = start;
+  });
+}
+
+function setEnd(end: number) {
+  mutateStore(({ selection }) => {
+    selection.end = end;
+
+    if (selection.start === null) {
+      selection.start = end;
+    }
+  });
 }
