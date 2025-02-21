@@ -4,6 +4,7 @@ import { useMemo, useEffect } from "react";
 import { createMusicDiagramAst } from "@/app/music-diagram-ast/music-diagram-ast";
 import SystemSegments from "@/app/components/system-segments";
 import { useStore } from "@/app/store";
+import { createSection } from "@/app/actions/create-section";
 
 export function App() {
   const diagramDocument = useStore((state) => state.document);
@@ -11,8 +12,6 @@ export function App() {
   const diagramAst = useMemo(() => {
     return createMusicDiagramAst(diagramDocument);
   }, [diagramDocument]);
-
-  const createSection = useStore((state) => state.createSection);
 
   // todo: consider better ways of handling key commands and actions (possibly also separate actions from state)
   useEffect(() => {
