@@ -2,18 +2,30 @@ import { MultiSystemSection as MultiSystemSectionProps } from "@/app/music-diagr
 import SystemSegments from "@/app/components/system-segments";
 import { colorMap } from "@/app/colors";
 import clsx from "clsx";
+import { mutateStore } from "@/app/store/mutate-store";
+import { useStore } from "@/app/store/store";
 export default function MultiSystemSection(props: MultiSystemSectionProps) {
   const horizontalPaddingValue = `${props.paddingLevel * 8}px`;
   const color = colorMap[props.attributes.color ?? "gray"];
+  const isSelected = useStore(
+    ({ selection }) => selection.section === props.attributes,
+  );
 
   function selectSection() {
-    console.log("select section" + props.attributes.name);
+    mutateStore(({ selection }) => {
+      selection.section = props.attributes;
+      selection.start = null;
+      selection.end = null;
+    });
   }
 
   return (
     <div className="col-span-full grid grid-cols-subgrid">
       <h2
-        className="col-span-full text-lg font-bold"
+        className={clsx(
+          "col-span-full text-lg",
+          isSelected ? "font-extrabold" : "font-bold",
+        )}
         style={{
           color,
         }}
@@ -23,7 +35,10 @@ export default function MultiSystemSection(props: MultiSystemSectionProps) {
         </span>
       </h2>
       <div
-        className="relative col-span-full grid grid-cols-subgrid gap-y-3 rounded-xl border-2 px-2 py-3"
+        className={clsx(
+          "relative col-span-full grid grid-cols-subgrid gap-y-3 rounded-xl border-2 px-2 py-3",
+          isSelected ? "border-4" : "border-2",
+        )}
         style={{
           paddingLeft: horizontalPaddingValue,
           paddingRight: horizontalPaddingValue,

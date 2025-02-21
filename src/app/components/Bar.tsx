@@ -40,6 +40,7 @@ export default function Bar(props: BarProps) {
 
 function setStart(start: number) {
   mutateStore(({ selection }) => {
+    selection.section = null;
     selection.start = start;
     selection.end = start;
   });
@@ -47,6 +48,7 @@ function setStart(start: number) {
 
 function setEnd(end: number) {
   mutateStore(({ selection }) => {
+    selection.section = null;
     selection.end = end;
 
     if (selection.start === null) {
