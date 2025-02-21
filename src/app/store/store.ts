@@ -1,9 +1,10 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { defaultDocument } from "@/app/default-document";
+import { MusicDiagramDocument } from "@/app/music-diagram-document/music-diagram-document";
 
 export interface StoreValue {
-  document: typeof defaultDocument;
+  document: MusicDiagramDocument;
   selection: {
     start: number | null;
     end: number | null;
