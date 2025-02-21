@@ -32,7 +32,7 @@ export default function Bar(props: BarProps) {
           isSelected && "text-gray-400",
         )}
       >
-        {props.index}
+        {props.index + 1}
       </span>
     </span>
   );
