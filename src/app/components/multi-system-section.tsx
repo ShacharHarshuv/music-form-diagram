@@ -7,13 +7,13 @@ import { useStore } from "@/app/store/store";
 export default function MultiSystemSection(props: MultiSystemSectionProps) {
   const horizontalPaddingValue = `${props.paddingLevel * 8}px`;
   const color = colorMap[props.attributes.color ?? "gray"];
-  const isSelected = useStore(
-    ({ selection }) => selection.section === props.attributes,
-  );
+  const isSelected = useStore(({ selection }) => {
+    return selection.section === props.id;
+  });
 
   function selectSection() {
     mutateStore(({ selection }) => {
-      selection.section = props.attributes;
+      selection.section = props.id;
       selection.start = null;
       selection.end = null;
     });
@@ -30,9 +30,24 @@ export default function MultiSystemSection(props: MultiSystemSectionProps) {
           color,
         }}
       >
-        <span className="cursor-pointer" onClick={selectSection}>
-          {props.attributes.name}
-        </span>
+        <input
+          type="text"
+          value={props.attributes.name}
+          onInput={(e) => {
+            mutateStore(({ document }) => {
+              const section = document.sections.find((section) => {
+                return section.id === props.id;
+              });
+              if (!section) {
+                throw new Error("Could not find edited section");
+              }
+              section.attributes.name = e.currentTarget.value;
+            });
+          }}
+        />
+        {/*<span className="cursor-pointer" onClick={selectSection}>*/}
+        {/*  {props.attributes.name}*/}
+        {/*</span>*/}
       </h2>
       <div
         className={clsx(
@@ -52,9 +67,10 @@ export default function MultiSystemSection(props: MultiSystemSectionProps) {
           "inset-x-0 h-4 -bottom-2",
           "inset-y-0 w-4 -left-2",
           "inset-y-0 w-4 -right-2",
-        ].map((positionClasses) => {
+        ].map((positionClasses, index) => {
           return (
             <div
+              key={index}
               className={clsx("absolute cursor-pointer", positionClasses)}
               onClick={selectSection}
             />

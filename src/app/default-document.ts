@@ -5,6 +5,7 @@ export const defaultDocument: MusicDiagramDocument = {
   length: 32,
   sections: [
     {
+      id: 0,
       start: 0,
       end: 3,
       attributes: {
@@ -13,6 +14,7 @@ export const defaultDocument: MusicDiagramDocument = {
       },
     },
     {
+      id: 1,
       start: 0,
       end: 1,
       attributes: {

@@ -2,6 +2,7 @@ import { createAction } from "@/app/actions/action";
 import { selectedRange } from "@/app/store/selected-range";
 import { current } from "@/app/store/current";
 import { mutateStore } from "@/app/store/mutate-store";
+import { last } from "lodash";
 
 export const createSection = createAction({
   description: "Create New Section",
@@ -36,7 +37,10 @@ export const createSection = createAction({
     }
 
     mutateStore(({ document }) => {
+      const lastId = last(document.sections)?.id ?? 0;
+
       document.sections.push({
+        id: lastId,
         start,
         end,
         attributes: {},
