@@ -5,7 +5,7 @@ export interface SectionAttributes {
   color?: Color;
 }
 
-interface Section {
+export interface Section {
   start: number;
   end: number;
   attributes: SectionAttributes;
