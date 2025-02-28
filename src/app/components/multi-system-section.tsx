@@ -33,6 +33,7 @@ export default function MultiSystemSection(props: MultiSystemSectionProps) {
       >
         <input
           type="text"
+          className="focus:outline-none focus:ring-0"
           value={props.attributes.name ?? ""}
           onInput={(e) => {
             mutateStore(({ document }) => {
