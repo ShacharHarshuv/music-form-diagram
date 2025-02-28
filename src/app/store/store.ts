@@ -1,14 +1,17 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { defaultDocument } from "@/app/default-document";
-import { MusicDiagramDocument } from "@/app/music-diagram-document/music-diagram-document";
+import {
+  MusicDiagramDocument,
+  SectionAttributes,
+} from "@/app/music-diagram-document/music-diagram-document";
 
 export interface StoreValue {
   document: MusicDiagramDocument;
   selection: {
     start: number | null;
     end: number | null;
-    section: number | null;
+    section: SectionAttributes | null;
   };
 }
 

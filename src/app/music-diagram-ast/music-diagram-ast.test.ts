@@ -26,7 +26,6 @@ describe(createMusicDiagramAst.name, () => {
     length: 32,
     sections: [
       {
-        id: 0,
         start: 0,
         end: 4,
         attributes: {
@@ -41,7 +40,6 @@ describe(createMusicDiagramAst.name, () => {
     length: 32,
     sections: [
       {
-        id: 0,
         start: 0,
         end: 3,
         attributes: {
@@ -50,7 +48,6 @@ describe(createMusicDiagramAst.name, () => {
         },
       },
       {
-        id: 1,
         start: 4,
         end: 7,
         attributes: {
@@ -64,7 +61,6 @@ describe(createMusicDiagramAst.name, () => {
     length: 32,
     sections: [
       {
-        id: 0,
         start: 0,
         end: 3,
         attributes: {
@@ -73,7 +69,6 @@ describe(createMusicDiagramAst.name, () => {
         },
       },
       {
-        id: 1,
         start: 1,
         end: 2,
         attributes: {
@@ -87,7 +82,6 @@ describe(createMusicDiagramAst.name, () => {
     length: 32,
     sections: [
       {
-        id: 0,
         start: 0,
         end: 3,
         attributes: {
@@ -96,7 +90,6 @@ describe(createMusicDiagramAst.name, () => {
         },
       },
       {
-        id: 1,
         start: 0,
         end: 1,
         attributes: {

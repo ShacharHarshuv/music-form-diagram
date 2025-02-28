@@ -37,10 +37,7 @@ export const createSection = createAction({
     }
 
     mutateStore(({ document }) => {
-      const lastId = last(document.sections)?.id ?? 0;
-
       document.sections.push({
-        id: lastId,
         start,
         end,
         attributes: {},

@@ -4,16 +4,17 @@ import { colorMap } from "@/app/colors";
 import clsx from "clsx";
 import { mutateStore } from "@/app/store/mutate-store";
 import { useStore } from "@/app/store/store";
+
 export default function MultiSystemSection(props: MultiSystemSectionProps) {
   const horizontalPaddingValue = `${props.paddingLevel * 8}px`;
   const color = colorMap[props.attributes.color ?? "gray"];
   const isSelected = useStore(({ selection }) => {
-    return selection.section === props.id;
+    return selection.section === props.attributes;
   });
 
   function selectSection() {
     mutateStore(({ selection }) => {
-      selection.section = props.id;
+      selection.section = props.attributes;
       selection.start = null;
       selection.end = null;
     });
@@ -32,12 +33,10 @@ export default function MultiSystemSection(props: MultiSystemSectionProps) {
       >
         <input
           type="text"
-          value={props.attributes.name}
+          value={props.attributes.name ?? ""}
           onInput={(e) => {
             mutateStore(({ document }) => {
-              const section = document.sections.find((section) => {
-                return section.id === props.id;
-              });
+              const section = document.sections[props.index];
               if (!section) {
                 throw new Error("Could not find edited section");
               }
@@ -45,9 +44,6 @@ export default function MultiSystemSection(props: MultiSystemSectionProps) {
             });
           }}
         />
-        {/*<span className="cursor-pointer" onClick={selectSection}>*/}
-        {/*  {props.attributes.name}*/}
-        {/*</span>*/}
       </h2>
       <div
         className={clsx(

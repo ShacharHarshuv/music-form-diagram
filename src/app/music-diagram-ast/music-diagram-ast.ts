@@ -23,9 +23,9 @@ export interface InlineNote {
 }
 
 export interface MultiSystemSection {
+  index: number;
   type: "MultiSystemSection";
   paddingLevel: number;
-  id: number;
   attributes: SectionAttributes;
   segments: SystemSegment[];
 }
@@ -46,7 +46,7 @@ export interface Diagram {
 
 // internal type as a step in calculating what should be a system section and what should be an inline section
 interface Section {
-  id: number;
+  index: number;
   type: "Section";
   attributes: SectionAttributes;
   elements: (Bar | Section)[];
@@ -122,7 +122,7 @@ function createBarsWithSections(doc: MusicDiagramDocument) {
   }));
 
   const rootSection: Section = {
-    id: -1,
+    index: -1,
     type: "Section",
     attributes: {
       name: "root", // for debugging only
@@ -131,7 +131,10 @@ function createBarsWithSections(doc: MusicDiagramDocument) {
   };
 
   // building the sections from smallest to biggest avoids issues where it's hard to understand which is the common container of two bar indices
-  for (const section of sortBy(doc.sections, ({ start, end }) => end - start)) {
+  for (const section of sortBy(
+    doc.sections.map((section, index) => ({ ...section, index })),
+    ({ start, end }) => end - start,
+  )) {
     const start = findStartElement(rootSection, section.start);
     const end = findEndElement(rootSection, section.end);
 
@@ -163,7 +166,7 @@ function createBarsWithSections(doc: MusicDiagramDocument) {
     const { parent } = start;
 
     const sectionElement: Section = {
-      id: section.id,
+      index: section.index,
       type: "Section",
       attributes: section.attributes,
       elements: parent.elements.slice(start.index, end.index + 1),
@@ -214,7 +217,7 @@ export function createMusicDiagramAst(doc: MusicDiagramDocument): Diagram {
         }
 
         segments.push({
-          id: section.id,
+          index: section.index,
           paddingLevel: 0,
           type: "MultiSystemSection",
           attributes: section.attributes,
