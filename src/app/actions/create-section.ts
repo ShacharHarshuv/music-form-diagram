@@ -2,7 +2,7 @@ import { createAction } from "@/app/actions/action";
 import { selectedRange } from "@/app/store/selected-range";
 import { current } from "@/app/store/current";
 import { mutateStore } from "@/app/store/mutate-store";
-import { last } from "lodash";
+import { v4 as uuidv4 } from "uuid";
 
 export const createSection = createAction({
   description: "Create New Section",
@@ -38,6 +38,7 @@ export const createSection = createAction({
 
     mutateStore(({ document }) => {
       document.sections.push({
+        id: uuidv4(),
         start,
         end,
         attributes: {},

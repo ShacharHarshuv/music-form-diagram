@@ -2,7 +2,7 @@ import {
   SectionAttributes,
   MusicDiagramDocument,
 } from "@/app/music-diagram-document/music-diagram-document";
-import { sortBy, max } from "lodash";
+import { sortBy, max, sumBy } from "lodash";
 
 export interface Bar {
   type: "Bar";
@@ -11,6 +11,7 @@ export interface Bar {
 }
 
 export interface InlineSection {
+  id: string;
   attributes: SectionAttributes;
   start: number;
   end: number;
@@ -23,6 +24,7 @@ export interface InlineNote {
 }
 
 export interface MultiSystemSection {
+  id: string;
   index: number;
   type: "MultiSystemSection";
   paddingLevel: number;
@@ -33,7 +35,7 @@ export interface MultiSystemSection {
 export interface System {
   type: "System";
   bars: Bar[];
-  // sections: InlineSection[];
+  sections: InlineSection[];
   // inlineNotes: InlineNote[];
 }
 
@@ -46,10 +48,19 @@ export interface Diagram {
 
 // internal type as a step in calculating what should be a system section and what should be an inline section
 interface Section {
+  id: string;
   index: number;
   type: "Section";
   attributes: SectionAttributes;
   elements: (Bar | Section)[];
+}
+
+function getSectionSize(section: Section | Bar) {
+  if (section.type === "Bar") {
+    return 1;
+  }
+
+  return sumBy(section.elements, getSectionSize);
 }
 
 function getElementNameForDebugging(element: Section | Bar) {
@@ -122,6 +133,7 @@ function createBarsWithSections(doc: MusicDiagramDocument) {
   }));
 
   const rootSection: Section = {
+    id: "root",
     index: -1,
     type: "Section",
     attributes: {
@@ -166,6 +178,7 @@ function createBarsWithSections(doc: MusicDiagramDocument) {
     const { parent } = start;
 
     const sectionElement: Section = {
+      id: section.id,
       index: section.index,
       type: "Section",
       attributes: section.attributes,
@@ -188,6 +201,7 @@ function createEmptySystem(): System {
   return {
     type: "System",
     bars: [],
+    sections: [],
   };
 }
 
@@ -197,11 +211,17 @@ export function createMusicDiagramAst(doc: MusicDiagramDocument): Diagram {
     const segments: (MultiSystemSection | System)[] = [];
 
     function pushSystem() {
+      currentSystem.sections = sortBy(
+        currentSystem.sections,
+        ({ start, end }) => start - end, // we want longer sections rendered first
+      );
       segments.push(currentSystem);
       currentSystem = createEmptySystem();
     }
 
-    for (const element of elements) {
+    console.log("elements", elements); // todo
+
+    function processElement(element: Section | Bar) {
       if (element.type === "Bar") {
         const bar = element;
         currentSystem.bars.push(bar);
@@ -212,19 +232,42 @@ export function createMusicDiagramAst(doc: MusicDiagramDocument): Diagram {
       } else if (element.type === "Section") {
         const section = element;
 
-        if (currentSystem.bars.length) {
-          pushSystem();
-        }
+        const size = getSectionSize(section);
+        if (size < maxBarsInSystem) {
+          // inline section
+          const currentSystemLength = currentSystem.bars.length;
+          if (currentSystemLength + size > maxBarsInSystem) {
+            // can't fit the inline section in the current system
+            pushSystem();
+          }
 
-        segments.push({
-          index: section.index,
-          paddingLevel: 0,
-          type: "MultiSystemSection",
-          attributes: section.attributes,
-          segments: createSegments(section.elements),
-        });
+          console.log("pushing section", section.attributes.name);
+          currentSystem.sections.push({
+            ...section,
+            start: currentSystemLength,
+            end: currentSystemLength + size,
+          });
+
+          section.elements.forEach(processElement);
+        } else {
+          // multi system section
+          if (currentSystem.bars.length) {
+            pushSystem();
+          }
+
+          segments.push({
+            id: section.id,
+            index: section.index,
+            paddingLevel: 0,
+            type: "MultiSystemSection",
+            attributes: section.attributes,
+            segments: createSegments(section.elements),
+          });
+        }
       }
     }
+
+    elements.forEach(processElement);
 
     if (currentSystem.bars.length) {
       pushSystem();

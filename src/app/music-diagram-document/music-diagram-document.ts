@@ -6,6 +6,7 @@ export interface SectionAttributes {
 }
 
 export interface Section {
+  id: string; // a randomly generated id that is immutable after creation
   start: number;
   end: number;
   attributes: SectionAttributes;

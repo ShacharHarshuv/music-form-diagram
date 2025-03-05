@@ -12,7 +12,7 @@ export default function MultiSystemSection(props: MultiSystemSectionProps) {
   const colorName = props.attributes.color ?? "gray";
   const color = colorMap[colorName];
   const isSelected = useStore(({ selection }) => {
-    return selection.section === props.attributes;
+    return selection.section === props.id;
   });
 
   function mutateSection(callback: (section: Section) => void) {
@@ -27,7 +27,7 @@ export default function MultiSystemSection(props: MultiSystemSectionProps) {
 
   function selectSection() {
     mutateStore(({ selection }) => {
-      selection.section = props.attributes;
+      selection.section = props.id;
       selection.start = null;
       selection.end = null;
     });

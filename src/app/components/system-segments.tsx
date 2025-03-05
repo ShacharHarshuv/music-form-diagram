@@ -14,7 +14,7 @@ export default function SystemSegments({
           case "System":
             return <System {...segment} key={index} />;
           case "MultiSystemSection":
-            return <MultiSystemSection {...segment} key={index} />;
+            return <MultiSystemSection {...segment} key={segment.id} />;
         }
       })}
     </>
