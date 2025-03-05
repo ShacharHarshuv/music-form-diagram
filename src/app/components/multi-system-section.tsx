@@ -24,7 +24,7 @@ export default function MultiSystemSection(props: MultiSystemSectionProps) {
       >
         <SectionName name={props.attributes.name} onRename={rename} />
         <ColorPicker
-          className="opacity-0 group-hover:opacity-100"
+          className="ml-2 opacity-0 group-hover:opacity-100"
           value={colorName}
           onChange={changeColor}
         />

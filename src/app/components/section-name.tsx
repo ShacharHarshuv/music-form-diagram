@@ -8,7 +8,7 @@ export function SectionName({
   return (
     <input
       type="text"
-      className="mr-2 field-sizing-content focus:ring-0 focus:outline-hidden"
+      className="field-sizing-content max-w-full min-w-4 focus:ring-0 focus:outline-hidden"
       value={name ?? ""}
       onInput={(e) => onRename(e.currentTarget.value)}
     />
