@@ -19,7 +19,7 @@ export function App() {
   }, []);
 
   return (
-    <div className="mx-auto mt-5 max-w-screen-md p-4">
+    <div className="mx-auto mt-5 max-w-(--breakpoint-md) p-4">
       <h1 className="mb-3 text-3xl font-bold">
         <input
           type="text"
