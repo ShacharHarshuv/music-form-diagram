@@ -38,7 +38,7 @@ export const deleteSelected = createAction({
     if (current().selection.section) {
       mutateStore(({ document, selection }) => {
         document.sections = current().document.sections.filter((section) => {
-          return section.attributes !== current().selection.section;
+          return section.id !== current().selection.section;
         });
 
         selection.section = null;

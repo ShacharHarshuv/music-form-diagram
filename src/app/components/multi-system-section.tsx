@@ -1,37 +1,15 @@
 import { MultiSystemSection as MultiSystemSectionProps } from "@/app/music-diagram-ast/music-diagram-ast";
 import SystemSegments from "@/app/components/system-segments";
-import { colorMap } from "@/app/colors";
 import clsx from "clsx";
-import { mutateStore } from "@/app/store/mutate-store";
-import { useStore } from "@/app/store/store";
 import { ColorPicker } from "@/app/components/color-picker";
-import { Section } from "@/app/music-diagram-document/music-diagram-document";
+import { useSection } from "@/app/components/use-section";
+import { SectionName } from "@/app/components/section-name";
 
 export default function MultiSystemSection(props: MultiSystemSectionProps) {
   const horizontalPaddingValue = `${props.paddingLevel * 8}px`;
-  const colorName = props.attributes.color ?? "gray";
-  const color = colorMap[colorName];
-  const isSelected = useStore(({ selection }) => {
-    return selection.section === props.id;
-  });
 
-  function mutateSection(callback: (section: Section) => void) {
-    mutateStore(({ document }) => {
-      const section = document.sections[props.index];
-      if (!section) {
-        throw new Error("Could not find edited section");
-      }
-      callback(section);
-    });
-  }
-
-  function selectSection() {
-    mutateStore(({ selection }) => {
-      selection.section = props.id;
-      selection.start = null;
-      selection.end = null;
-    });
-  }
+  const { isSelected, color, rename, colorName, changeColor, selectSection } =
+    useSection(props);
 
   return (
     <div className="col-span-full grid grid-cols-subgrid">
@@ -44,24 +22,11 @@ export default function MultiSystemSection(props: MultiSystemSectionProps) {
           color,
         }}
       >
-        <input
-          type="text"
-          className="focus:outline-hidden focus:ring-0"
-          value={props.attributes.name ?? ""}
-          onInput={(e) => {
-            mutateSection(({ attributes }) => {
-              attributes.name = e.currentTarget.value;
-            });
-          }}
-        />
+        <SectionName name={props.attributes.name} onRename={rename} />
         <ColorPicker
           className="opacity-0 group-hover:opacity-100"
           value={colorName}
-          onChange={(newColor) =>
-            mutateSection(({ attributes }) => {
-              attributes.color = newColor;
-            })
-          }
+          onChange={changeColor}
         />
       </h2>
       <div

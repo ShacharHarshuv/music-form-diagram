@@ -25,7 +25,6 @@ export interface InlineNote {
 
 export interface MultiSystemSection {
   id: string;
-  index: number;
   type: "MultiSystemSection";
   paddingLevel: number;
   attributes: SectionAttributes;
@@ -257,7 +256,6 @@ export function createMusicDiagramAst(doc: MusicDiagramDocument): Diagram {
 
           segments.push({
             id: section.id,
-            index: section.index,
             paddingLevel: 0,
             type: "MultiSystemSection",
             attributes: section.attributes,
