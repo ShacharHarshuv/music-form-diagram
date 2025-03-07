@@ -1,7 +1,6 @@
 import { createAction } from "@/app/actions/action";
 import { openFile } from "@/app/file-management/file-management";
 import { mutateStore } from "@/app/store/mutate-store";
-import { useStore } from "@/app/store/store";
 
 export const open = createAction({
   description: "Save",

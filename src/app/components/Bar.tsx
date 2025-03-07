@@ -17,13 +17,17 @@ export default function Bar(props: BarProps) {
   return (
     <span
       className={clsx(
-        "inline-block h-8 cursor-pointer select-none border-r border-gray-300 px-2",
+        "inline-block h-8 cursor-pointer border-r border-gray-300 px-2 select-none",
         isSelected
           ? "bg-gray-200 hover:bg-gray-300"
           : "bg-gray-50 hover:bg-gray-100",
       )}
       onMouseDown={(event) => {
-        event.shiftKey ? setEnd(props.index) : setStart(props.index);
+        if (event.shiftKey) {
+          setEnd(props.index);
+        } else {
+          setStart(props.index);
+        }
       }}
     >
       <span

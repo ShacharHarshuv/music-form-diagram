@@ -4,8 +4,7 @@ import clsx from "clsx";
 import { SectionName } from "@/app/components/section-name";
 
 export function InlineSection(props: InlineSectionProps) {
-  const { isSelected, color, rename, colorName, changeColor, selectSection } =
-    useSection(props);
+  const { isSelected, color, rename, selectSection } = useSection(props);
 
   return (
     <div

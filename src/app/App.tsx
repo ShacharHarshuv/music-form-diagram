@@ -17,7 +17,7 @@ export function App() {
 
   useEffect(() => {
     actions.forEach((action) => action.register());
-  }, [actions]); // needed for hmr, in prod it wouldn't change
+  }, []);
 
   return (
     <div className="mx-auto mt-5 max-w-(--breakpoint-md) p-4">
