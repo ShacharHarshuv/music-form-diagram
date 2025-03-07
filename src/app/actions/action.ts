@@ -10,7 +10,10 @@ export function createAction({
   perform: () => void;
 }) {
   const action = Object.assign(
-    () => {
+    (event?: KeyboardEvent) => {
+      if (event) {
+        event.preventDefault();
+      }
       perform();
     },
     {

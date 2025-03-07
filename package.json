@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@types/lodash": "^4.17.15",
+    "@types/wicg-file-system-access": "^2023.10.5",
     "clsx": "^2.1.1",
     "hotkeys-js": "^3.13.9",
     "immer": "^10.1.1",
