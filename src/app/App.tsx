@@ -6,6 +6,7 @@ import SystemSegments from "@/app/components/system-segments";
 import { useStore } from "@/app/store/store";
 import { actions } from "@/app/actions/actions";
 import { mutateStore } from "@/app/store/mutate-store";
+import { addBars } from "@/app/actions/add-bars";
 
 export function App() {
   const diagramDocument = useStore((state) => state.document);
@@ -17,6 +18,12 @@ export function App() {
 
   useEffect(() => {
     actions.forEach((action) => action.register());
+  }, []);
+
+  useEffect(() => {
+    if (!diagramDocument.length) {
+      addBars();
+    }
   }, []);
 
   return (
