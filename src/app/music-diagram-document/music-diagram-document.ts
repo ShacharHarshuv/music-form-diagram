@@ -13,7 +13,6 @@ export interface Section {
 }
 
 export interface MusicDiagramDocument {
-  title: string;
   length: number; // in bars
   sections: Section[];
 }

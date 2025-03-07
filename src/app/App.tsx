@@ -9,6 +9,7 @@ import { mutateStore } from "@/app/store/mutate-store";
 
 export function App() {
   const diagramDocument = useStore((state) => state.document);
+  const title = useStore(({ title }) => title);
 
   const diagramAst = useMemo(() => {
     return createMusicDiagramAst(diagramDocument);
@@ -22,11 +23,13 @@ export function App() {
     <div className="mx-auto mt-5 max-w-(--breakpoint-md) p-4">
       <h1 className="mb-3 text-3xl font-bold">
         <input
+          className="focus:ring-0 focus:outline-hidden"
           type="text"
-          value={diagramDocument.title}
+          value={title}
+          placeholder="Untitled"
           onInput={(e) => {
-            mutateStore(({ document }) => {
-              document.title = e.currentTarget.value;
+            mutateStore((store) => {
+              store.title = e.currentTarget.value;
             });
           }}
         />

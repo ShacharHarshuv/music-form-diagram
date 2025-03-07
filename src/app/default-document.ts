@@ -2,7 +2,6 @@ import { MusicDiagramDocument } from "@/app/music-diagram-document/music-diagram
 import { v4 as uuidv4 } from "uuid";
 
 export const defaultDocument: MusicDiagramDocument = {
-  title: "Untitled",
   length: 32,
   sections: [
     {

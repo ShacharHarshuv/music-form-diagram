@@ -10,7 +10,6 @@ function expectNotToThrow(
   test(name, () => {
     expect(() =>
       createMusicDiagramAst({
-        title: "Untitled",
         sections: [],
         ...input,
       }),

@@ -4,6 +4,7 @@ import { defaultDocument } from "@/app/default-document";
 import { MusicDiagramDocument } from "@/app/music-diagram-document/music-diagram-document";
 
 export interface StoreValue {
+  title: string;
   document: MusicDiagramDocument;
   selection: {
     start: number | null;
@@ -13,6 +14,7 @@ export interface StoreValue {
 }
 
 const initialStoreValue: StoreValue = {
+  title: "",
   document: defaultDocument,
   selection: {
     start: null,

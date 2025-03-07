@@ -10,7 +10,10 @@ const types: FilePickerAcceptType[] = [
   },
 ];
 
-export const openFile = async (): Promise<MusicDiagramDocument> => {
+export const openFile = async (): Promise<{
+  document: MusicDiagramDocument;
+  name: string;
+}> => {
   const [handle] = await window.showOpenFilePicker({
     types,
   });
@@ -19,20 +22,22 @@ export const openFile = async (): Promise<MusicDiagramDocument> => {
 
   const file = await handle.getFile();
   const text = await file.text();
-  return JSON.parse(text) as MusicDiagramDocument;
+  return {
+    document: JSON.parse(text) as MusicDiagramDocument,
+    name: file.name.split(".").slice(0, -1).join("."),
+  };
 };
 
 export const saveFile = async (
-  name: string,
   content: MusicDiagramDocument,
+  name?: string,
   promptForNewFile = true,
 ) => {
   let handle = fileHandle;
 
   if (!handle || promptForNewFile) {
-    const extension = name.split(".").pop();
     handle = await window.showSaveFilePicker({
-      suggestedName: `${name}.${extension}`,
+      suggestedName: name,
       types,
     });
     fileHandle = handle;
