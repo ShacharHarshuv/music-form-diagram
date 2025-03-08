@@ -234,8 +234,7 @@ export function createMusicDiagramAst(doc: MusicDiagramDocument): Diagram {
         const size = getSectionSize(section);
         if (size < maxBarsInSystem) {
           // inline section
-          const currentSystemLength = currentSystem.bars.length;
-          if (currentSystemLength + size > maxBarsInSystem) {
+          if (currentSystem.bars.length + size > maxBarsInSystem) {
             // can't fit the inline section in the current system
             pushSystem();
           }
@@ -243,8 +242,8 @@ export function createMusicDiagramAst(doc: MusicDiagramDocument): Diagram {
           console.log("pushing section", section.attributes.name);
           currentSystem.sections.push({
             ...section,
-            start: currentSystemLength,
-            end: currentSystemLength + size,
+            start: currentSystem.bars.length,
+            end: currentSystem.bars.length + size,
           });
 
           section.elements.forEach(processElement);
