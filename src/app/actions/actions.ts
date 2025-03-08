@@ -5,6 +5,7 @@ import { undo } from "@/app/actions/undo";
 import { redo } from "@/app/actions/redo";
 import { save } from "@/app/actions/save";
 import { open } from "@/app/actions/open";
+import { newFile } from "@/app/actions/new";
 
 export const actions = [
   createSection,
@@ -14,4 +15,5 @@ export const actions = [
   redo,
   save,
   open,
+  newFile,
 ];
