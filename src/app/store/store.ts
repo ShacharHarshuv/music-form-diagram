@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { devtools } from "zustand/middleware";
+import { devtools, persist } from "zustand/middleware";
 import { defaultDocument } from "@/app/default-document";
 import { MusicDiagramDocument } from "@/app/music-diagram-document/music-diagram-document";
 
@@ -23,4 +23,10 @@ const initialStoreValue: StoreValue = {
   },
 };
 
-export const useStore = create<StoreValue>()(devtools(() => initialStoreValue));
+export const useStore = create<StoreValue>()(
+  devtools(
+    persist(() => initialStoreValue, {
+      name: "music-diagram",
+    }),
+  ),
+);
