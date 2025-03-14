@@ -7,7 +7,7 @@ import {
 } from "@/app/music-diagram-ast/music-diagram-ast";
 import SystemSegments from "@/app/components/system-segments";
 import { useStore } from "@/app/store/store";
-import { actions } from "@/app/actions/actions";
+import { useActions } from "@/app/actions/actions";
 import { mutateStore } from "@/app/store/mutate-store";
 import { addBars } from "@/app/actions/add-bars";
 
@@ -18,10 +18,15 @@ export function App() {
   const diagramAst = useMemo(() => {
     return createMusicDiagramAst(diagramDocument);
   }, [diagramDocument]);
+  const actions = useActions();
 
   useEffect(() => {
     actions.forEach((action) => action.register());
-  }, []);
+
+    return () => {
+      actions.forEach((action) => action.unregister());
+    };
+  }, [actions]); // in practice actions never changes, but this is necessary for debugging
 
   return (
     <div className="mx-auto mt-5 max-w-(--breakpoint-md) p-4">

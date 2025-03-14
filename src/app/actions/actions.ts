@@ -6,8 +6,9 @@ import { redo } from "@/app/actions/redo";
 import { save } from "@/app/actions/save";
 import { open } from "@/app/actions/open";
 import { newFile } from "@/app/actions/new";
+import { navigationActions } from "@/app/actions/navigations";
 
-export const actions = [
+export const useActions = () => [
   createSection,
   deleteSelected,
   addBars,
@@ -16,4 +17,5 @@ export const actions = [
   save,
   open,
   newFile,
+  ...navigationActions,
 ];

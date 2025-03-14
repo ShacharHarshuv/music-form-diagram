@@ -23,6 +23,12 @@ export function createAction({
           hotkeys(hotkey, action);
         }
       },
+      // in practice actions never changes, but this is necessary for debugging
+      unregister: () => {
+        if (hotkey) {
+          hotkeys.unbind(hotkey, action);
+        }
+      },
     },
   );
 
