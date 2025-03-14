@@ -151,7 +151,7 @@ function createBarsWithSections(doc: MusicDiagramDocument) {
 
     if (!start) {
       throw new Error(
-        `Invalid start bar number ${section.start} for ${section.attributes.name}`,
+        `Invalid start bar number ${section.start} for ${section.attributes.name ?? "Untitled Section"}`,
       );
     }
     if (!end) {

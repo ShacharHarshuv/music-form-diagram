@@ -1,7 +1,6 @@
 import { current } from "@/app/store/current";
 
-export function selectedRange() {
-  const { selection } = current();
+export function selectedRange(selection = current().selection) {
   if (selection.start === null || selection.end === null) {
     return null;
   }
