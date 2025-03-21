@@ -3,6 +3,7 @@ import {
   MusicDiagramDocument,
 } from "@/app/music-diagram-document/music-diagram-document";
 import { sortBy, max, sumBy } from "lodash";
+import { initialStoreValue } from "../store/store";
 
 export interface Bar {
   type: "Bar";
@@ -204,7 +205,10 @@ function createEmptySystem(): System {
   };
 }
 
-export function createMusicDiagramAst(doc: MusicDiagramDocument): Diagram {
+export function createMusicDiagramAst(
+  doc: MusicDiagramDocument,
+  displayPreferences = initialStoreValue.displayPreferences,
+): Diagram {
   function createSegments(elements: (Section | Bar)[]) {
     let currentSystem = createEmptySystem();
     const segments: (MultiSystemSection | System)[] = [];
@@ -214,11 +218,28 @@ export function createMusicDiagramAst(doc: MusicDiagramDocument): Diagram {
         currentSystem.sections,
         ({ start, end }) => start - end, // we want longer sections rendered first
       );
-      segments.push(currentSystem);
+
+      const sectionThatCoversTheEntireSystem = currentSystem.sections.find(
+        ({ start, end }) => start === 0 && end === currentSystem.bars.length,
+      );
+
+      if (sectionThatCoversTheEntireSystem) {
+        currentSystem.sections = currentSystem.sections.filter(
+          ({ id }) => id !== sectionThatCoversTheEntireSystem.id,
+        );
+        segments.push({
+          id: sectionThatCoversTheEntireSystem.id,
+          paddingLevel: 0,
+          type: "MultiSystemSection",
+          attributes: sectionThatCoversTheEntireSystem.attributes,
+          segments: [currentSystem],
+        });
+      } else {
+        segments.push(currentSystem);
+      }
+
       currentSystem = createEmptySystem();
     }
-
-    console.log("elements", elements); // todo
 
     function processElement(element: Section | Bar) {
       if (element.type === "Bar") {
@@ -239,7 +260,6 @@ export function createMusicDiagramAst(doc: MusicDiagramDocument): Diagram {
             pushSystem();
           }
 
-          console.log("pushing section", section.attributes.name);
           currentSystem.sections.push({
             ...section,
             start: currentSystem.bars.length,
@@ -273,7 +293,33 @@ export function createMusicDiagramAst(doc: MusicDiagramDocument): Diagram {
     return segments;
   }
 
-  const segments = createSegments(createBarsWithSections(doc));
+  function preProcessElements(elements: (Section | Bar)[]): (Section | Bar)[] {
+    console.log("displayPreferences", displayPreferences); // todo
+    if (displayPreferences.notateToRealRatio === 1) {
+      return elements;
+    }
+
+    return elements
+      .map((element) => {
+        if (element.type === "Section") {
+          return {
+            ...element,
+            elements: preProcessElements(element.elements),
+          };
+        }
+
+        if (element.index % displayPreferences.notateToRealRatio !== 0) {
+          return null;
+        }
+
+        return element;
+      })
+      .filter((element) => element !== null);
+  }
+
+  const segments = createSegments(
+    preProcessElements(createBarsWithSections(doc)),
+  );
 
   // set MultiSystemSection paddingLevel
   function setPaddingLevels(segments: SystemSegment[]): number {

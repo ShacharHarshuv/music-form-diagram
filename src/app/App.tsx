@@ -13,11 +13,12 @@ import { addBars } from "@/app/actions/add-bars";
 
 export function App() {
   const diagramDocument = useStore((state) => state.document);
+  const displayPreferences = useStore((state) => state.displayPreferences);
   const title = useStore(({ title }) => title);
 
   const diagramAst = useMemo(() => {
-    return createMusicDiagramAst(diagramDocument);
-  }, [diagramDocument]);
+    return createMusicDiagramAst(diagramDocument, displayPreferences);
+  }, [diagramDocument, displayPreferences]);
   const actions = useActions();
 
   useEffect(() => {
@@ -27,6 +28,10 @@ export function App() {
       actions.forEach((action) => action.unregister());
     };
   }, [actions]); // in practice actions never changes, but this is necessary for debugging
+
+  useEffect(() => {
+    (window as any).mutateStore = mutateStore;
+  }, []);
 
   return (
     <div className="mx-auto mt-5 max-w-(--breakpoint-md) p-4">
