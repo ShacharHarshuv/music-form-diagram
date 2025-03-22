@@ -1,7 +1,5 @@
 import { createAction } from "@/app/actions/action";
-import { current } from "@/app/store/current";
 import { mutateStore } from "@/app/store/mutate-store";
-import { selectedRange } from "@/app/store/selected-range";
 
 function navigate(diff: number, reference: "start" | "end") {
   return () => {
