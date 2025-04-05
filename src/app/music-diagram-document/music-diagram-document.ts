@@ -3,6 +3,7 @@ import { Color } from "@/app/colors";
 export interface SectionAttributes {
   name?: string;
   color?: Color;
+  notes?: string;
 }
 
 export interface Section {

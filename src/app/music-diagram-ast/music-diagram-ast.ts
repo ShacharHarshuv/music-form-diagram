@@ -294,7 +294,6 @@ export function createMusicDiagramAst(
   }
 
   function preProcessElements(elements: (Section | Bar)[]): (Section | Bar)[] {
-    console.log("displayPreferences", displayPreferences); // todo
     if (displayPreferences.notateToRealRatio === 1) {
       return elements;
     }

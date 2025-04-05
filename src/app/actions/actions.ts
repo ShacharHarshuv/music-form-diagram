@@ -8,6 +8,7 @@ import { open } from "@/app/actions/open";
 import { newFile } from "@/app/actions/new";
 import { navigationActions } from "@/app/actions/navigations";
 import { moveBarsActions } from "@/app/actions/move-bars";
+import { addNotes } from "../notes/add-note";
 
 export const useActions = () => [
   createSection,
@@ -20,4 +21,5 @@ export const useActions = () => [
   newFile,
   ...navigationActions,
   ...moveBarsActions,
+  addNotes,
 ];

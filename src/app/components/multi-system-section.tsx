@@ -4,8 +4,10 @@ import clsx from "clsx";
 import { ColorPicker } from "@/app/components/color-picker";
 import { useSection } from "@/app/components/use-section";
 import { SectionName } from "@/app/components/section-name";
+import { useNoteAnchor } from "../notes/section-anchor";
 
 export default function MultiSystemSection(props: MultiSystemSectionProps) {
+  const notesAnchorRef = useNoteAnchor<HTMLHeadingElement>(props.id);
   const horizontalPaddingValue = `${props.paddingLevel * 8}px`;
 
   const { isSelected, color, rename, colorName, changeColor, selectSection } =
@@ -21,6 +23,7 @@ export default function MultiSystemSection(props: MultiSystemSectionProps) {
         style={{
           color,
         }}
+        ref={notesAnchorRef}
       >
         <SectionName name={props.attributes.name} onRename={rename} />
         <ColorPicker

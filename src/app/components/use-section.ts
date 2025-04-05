@@ -5,6 +5,7 @@ import {
 import { colorMap, Color } from "@/app/colors";
 import { useStore } from "@/app/store/store";
 import { mutateStore } from "@/app/store/mutate-store";
+import { mutateSection as _mutateSection } from "@/app/components/mutate-section";
 
 export function useSection({
   id,
@@ -20,11 +21,7 @@ export function useSection({
   });
 
   function mutateSection(callback: (section: Section) => void) {
-    mutateStore(({ document }) => {
-      const section = document.sections.find((section) => section.id === id);
-      if (!section) {
-        throw new Error("Could not find edited section");
-      }
+    _mutateSection(id, (section) => {
       callback(section);
     });
   }
