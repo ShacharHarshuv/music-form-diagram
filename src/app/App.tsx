@@ -32,6 +32,7 @@ export function App() {
   }, [actions]); // in practice actions never changes, but this is necessary for debugging
 
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (window as any).mutateStore = mutateStore;
   }, []);
 
