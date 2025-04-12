@@ -1,59 +1,38 @@
-import { useEffect, useMemo, useRef } from "react";
-import { useStore } from "../store/store";
-import { NotesAnchors } from "./notes-anchors";
+import { useEffect, useRef } from "react";
 import { mutateSection } from "../components/mutate-section";
 
-const offset = 20;
-
-export function Note({
-  id,
-  parentTop,
-}: {
+export interface NoteProps {
   id: string;
-  parentTop: number | null;
-}) {
-  const content = useStore((state) => {
-    const section = state.document.sections.find(
-      (section) => section.id === id,
-    );
-    return section ? section.attributes.notes || "" : "";
-  });
+  content: string;
+  anchor: HTMLElement;
+  top: number;
+  bottom: number | null;
+}
 
-  const anchor = NotesAnchors.useAnchor(id);
-
-  // todo: make the "layout engine" more sophisticated to handle overlapping notes & boundary change
-  const verticalPosition = useMemo(() => {
-    if (!anchor) return null;
-    const rect = anchor.getBoundingClientRect();
-    return rect.top - (parentTop ?? 0) - offset;
-  }, [anchor, parentTop]);
-
+export function Note(props: NoteProps) {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
 
-  if (!verticalPosition) {
-    return null;
-  }
-
   /* TODO: use a smarter editor with markdown support */
   return (
     <textarea
       ref={inputRef}
-      className="absolute w-full border p-2"
+      className="absolute w-full border-b p-2 resize-none text-sm"
       style={{
-        top: verticalPosition + "px",
+        top: props.top + "px",
+        height: props.bottom ? props.bottom - props.top + "px" : undefined,
       }}
-      value={content}
+      value={props.content}
       onChange={(e) => {
-        mutateSection(id, (section) => {
+        mutateSection(props.id, (section) => {
           section.attributes.notes = e.currentTarget.value;
         });
       }}
       onBlur={() => {
-        if (content.trim() === "") {
-          mutateSection(id, (section) => {
+        if (props.content.trim() === "") {
+          mutateSection(props.id, (section) => {
             delete section.attributes.notes;
           });
         }

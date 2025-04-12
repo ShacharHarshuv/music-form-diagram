@@ -1,17 +1,16 @@
 "use client";
 
-import { useMemo, useEffect, useRef, useState } from "react";
+import { useActions } from "@/app/actions/actions";
+import { addBars } from "@/app/actions/add-bars";
+import SystemSegments from "@/app/components/system-segments";
 import {
   createMusicDiagramAst,
   Diagram,
 } from "@/app/music-diagram-ast/music-diagram-ast";
-import SystemSegments from "@/app/components/system-segments";
-import { useStore } from "@/app/store/store";
-import { useActions } from "@/app/actions/actions";
 import { mutateStore } from "@/app/store/mutate-store";
-import { addBars } from "@/app/actions/add-bars";
-import { Note } from "./notes/Note";
-import { isNil } from "lodash";
+import { useStore } from "@/app/store/store";
+import { useEffect, useMemo } from "react";
+import { NotesSection } from "./notes/notes-section";
 
 export function App() {
   const diagramDocument = useStore((state) => state.document);
@@ -37,7 +36,7 @@ export function App() {
   }, []);
 
   return (
-    <div className="mx-auto mt-5 max-w-6xl p-4">
+    <div className="mx-auto mt-5 max-w-7xl p-4">
       <h1 className="mb-3 text-3xl font-bold">
         <input
           className="focus:ring-0 focus:outline-hidden"
@@ -51,7 +50,7 @@ export function App() {
           }}
         />
       </h1>
-      <div className="align flex gap-6">
+      <div className="grid grid-cols-[1fr_400px] gap-6">
         <DiagramBody diagram={diagramAst} />
         <NotesSection />
       </div>
@@ -79,32 +78,6 @@ function DiagramBody({ diagram }: { diagram: Diagram }) {
   return (
     <div className="grid grid-cols-8 gap-y-3">
       <SystemSegments segments={diagram.segments} />
-    </div>
-  );
-}
-
-function NotesSection() {
-  const sections = useStore((state) => state.document.sections);
-
-  const ids = useMemo(
-    () => sections.filter((s) => !isNil(s.attributes.notes)).map((s) => s.id),
-    [sections],
-  );
-
-  const ref = useRef<HTMLDivElement>(null);
-  const [top, setTop] = useState<number | null>(null);
-
-  useEffect(() => {
-    if (ref.current) {
-      setTop(ref.current.getBoundingClientRect().top);
-    }
-  }, []);
-
-  return (
-    <div className="relative grow p-3" ref={ref}>
-      {ids.map((id) => (
-        <Note id={id} parentTop={top} key={id} />
-      ))}
     </div>
   );
 }

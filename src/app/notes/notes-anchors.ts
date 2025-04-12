@@ -13,6 +13,22 @@ export const NotesAnchors = {
     delete anchors[id];
     subscribers.forEach((callback) => callback());
   },
+  useAnchors() {
+    const [anchorState, setAnchorState] = useState(anchors);
+
+    useEffect(() => {
+      const subscription = () => {
+        setAnchorState({ ...anchors });
+      };
+      subscribers.add(subscription);
+      return () => {
+        subscribers.delete(subscription);
+      };
+    }, []);
+
+    return anchorState;
+  },
+  // todo: remove if not needed
   useAnchor(id: string): HTMLElement | null {
     const [anchor, setAnchor] = useState<HTMLElement | null>(
       anchors[id] || null,
