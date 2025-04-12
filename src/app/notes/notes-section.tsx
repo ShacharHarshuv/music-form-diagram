@@ -32,6 +32,7 @@ export function NotesSection() {
           id: s.id,
           content: s.attributes.notes,
           anchor,
+          section: s,
           top: getTop(anchor) - top,
         };
       })

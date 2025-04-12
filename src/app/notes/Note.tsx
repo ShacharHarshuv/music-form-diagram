@@ -1,8 +1,12 @@
 import { useEffect, useRef } from "react";
 import { mutateSection } from "../components/mutate-section";
+import { useSection } from "../components/use-section";
+import { Section } from "../music-diagram-document/music-diagram-document";
+import { mutateStore } from "../store/mutate-store";
 
 export interface NoteProps {
   id: string;
+  section: Section;
   content: string;
   anchor: HTMLElement;
   top: number;
@@ -11,6 +15,8 @@ export interface NoteProps {
 
 export function Note(props: NoteProps) {
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const { color } = useSection(props.section);
+
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
@@ -23,19 +29,29 @@ export function Note(props: NoteProps) {
       style={{
         top: props.top + "px",
         height: props.bottom ? props.bottom - props.top + "px" : undefined,
+        outlineColor: color,
       }}
       value={props.content}
-      onChange={(e) => {
-        mutateSection(props.id, (section) => {
-          section.attributes.notes = e.currentTarget.value;
+      onFocus={() => {
+        mutateStore(({ selection }) => {
+          selection.section = props.id;
         });
       }}
       onBlur={() => {
+        mutateStore(({ selection }) => {
+          selection.section = null;
+        });
+
         if (props.content.trim() === "") {
           mutateSection(props.id, (section) => {
             delete section.attributes.notes;
           });
         }
+      }}
+      onChange={(e) => {
+        mutateSection(props.id, (section) => {
+          section.attributes.notes = e.currentTarget.value;
+        });
       }}
     />
   );
