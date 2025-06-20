@@ -39,7 +39,7 @@ export default function Bar(props: BarProps) {
         setEditValue(props.content || "");
       }}
     >
-      <span className="absolute top-0 left-0 w-0 h-0 text-xs text-gray-300 px-1">
+      <span className="absolute top-0 left-0 w-0 h-0 text-[10px] text-gray-300 px-1">
         {props.index + 1}
       </span>
       {/* Dummy input to handle TAB navigation */}
