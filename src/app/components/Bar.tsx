@@ -29,7 +29,12 @@ export default function Bar(props: BarProps) {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Enter" && isFirstSelected && !isEditing) {
+      if (
+        event.key === "Enter" &&
+        isFirstSelected &&
+        !isEditing &&
+        !isWritableFocus()
+      ) {
         event.preventDefault();
         setIsEditing(true);
         setEditValue(props.content || "");
@@ -152,4 +157,14 @@ function setEnd(end: number) {
       selection.start = end;
     }
   });
+}
+
+function isWritableFocus() {
+  const el = document.activeElement;
+  return (
+    ((el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) &&
+      !el.readOnly &&
+      !el.disabled) ||
+    (el instanceof HTMLElement && el?.isContentEditable === true)
+  );
 }
