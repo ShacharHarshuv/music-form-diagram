@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+/* Custom font declaration */
+@font-face {
+  font-family: "MusAnalysis";
+  src: url("/MusAnalysis.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

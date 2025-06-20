@@ -122,7 +122,7 @@ export default function Bar(props: BarProps) {
           autoFocus
         />
       ) : (
-        <span className="w-full h-full flex items-center justify-between text-xs text-gray-600 font-serif">
+        <span className="w-full h-full flex items-center justify-between text-xs text-gray-600 font-['MusAnalysis'] transform translate-y-1">
           {props.content &&
             props.content.split(" ").map((part, index) => (
               <span key={index} className="flex-1 text-left">
