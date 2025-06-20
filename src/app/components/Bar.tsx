@@ -3,7 +3,7 @@ import { mutateStore } from "@/app/store/mutate-store";
 import { selectedRange } from "@/app/store/selected-range";
 import { useStore } from "@/app/store/store";
 import clsx from "clsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Bar(props: BarProps) {
   const [isEditing, setIsEditing] = useState(false);
@@ -17,6 +17,30 @@ export default function Bar(props: BarProps) {
     const [min, max] = range;
     return props.index >= min && props.index <= max;
   });
+
+  const isFirstSelected = useStore(() => {
+    const range = selectedRange();
+    if (!range) {
+      return false;
+    }
+    const [min] = range;
+    return props.index === min;
+  });
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Enter" && isFirstSelected && !isEditing) {
+        event.preventDefault();
+        setIsEditing(true);
+        setEditValue(props.content || "");
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isFirstSelected, isEditing, props.content]);
 
   return (
     <span
