@@ -98,8 +98,13 @@ export default function Bar(props: BarProps) {
           autoFocus
         />
       ) : (
-        <span className="w-full h-full flex items-center justify-start text-xs text-gray-600 font-serif">
-          {props.content}
+        <span className="w-full h-full flex items-center justify-between text-xs text-gray-600 font-serif">
+          {props.content &&
+            props.content.split(" ").map((part, index) => (
+              <span key={index} className="flex-1 text-left">
+                {part}
+              </span>
+            ))}
         </span>
       )}
     </span>
