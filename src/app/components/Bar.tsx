@@ -1,10 +1,14 @@
 import { Bar as BarProps } from "@/app/music-diagram-ast/music-diagram-ast";
+import { mutateStore } from "@/app/store/mutate-store";
+import { selectedRange } from "@/app/store/selected-range";
 import { useStore } from "@/app/store/store";
 import clsx from "clsx";
-import { selectedRange } from "@/app/store/selected-range";
-import { mutateStore } from "@/app/store/mutate-store";
+import { useState } from "react";
 
 export default function Bar(props: BarProps) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editValue, setEditValue] = useState(props.content || "");
+
   const isSelected = useStore(() => {
     const range = selectedRange();
     if (!range) {
@@ -17,7 +21,7 @@ export default function Bar(props: BarProps) {
   return (
     <span
       className={clsx(
-        "inline-block h-8 cursor-pointer border-r border-gray-300 px-2 select-none",
+        "inline-block h-8 cursor-pointer border-r border-gray-300 px-2 select-none relative",
         isSelected
           ? "bg-gray-200 hover:bg-gray-300"
           : "bg-gray-50 hover:bg-gray-100",
@@ -29,15 +33,65 @@ export default function Bar(props: BarProps) {
           setStart(props.index);
         }
       }}
+      onDoubleClick={(e) => {
+        e.stopPropagation();
+        setIsEditing(true);
+        setEditValue(props.content || "");
+      }}
     >
-      <span
-        className={clsx(
-          "relative text-sm text-gray-300",
-          isSelected && "text-gray-400",
-        )}
-      >
+      <span className="absolute top-0 left-0 text-xs text-gray-300 px-1">
         {props.index + 1}
       </span>
+      {isEditing ? (
+        <input
+          type="text"
+          value={editValue}
+          onChange={(e) => setEditValue(e.target.value)}
+          onBlur={() => {
+            setIsEditing(false);
+            if (editValue !== props.content) {
+              mutateStore(({ document }) => {
+                if (!document.bars) {
+                  document.bars = {};
+                }
+                if (editValue.trim()) {
+                  document.bars[props.index] = editValue.trim();
+                } else {
+                  delete document.bars[props.index];
+                }
+              });
+            }
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              setIsEditing(false);
+              if (editValue !== props.content) {
+                mutateStore(({ document }) => {
+                  if (!document.bars) {
+                    document.bars = {};
+                  }
+                  if (editValue.trim()) {
+                    document.bars[props.index] = editValue.trim();
+                  } else {
+                    delete document.bars[props.index];
+                  }
+                });
+              }
+            } else if (e.key === "Escape") {
+              e.preventDefault();
+              setEditValue(props.content || "");
+              setIsEditing(false);
+            }
+          }}
+          className="w-full h-full text-xs bg-white border border-blue-500 focus:outline-none font-serif"
+          autoFocus
+        />
+      ) : (
+        <span className="w-full h-full flex items-center justify-start text-xs text-gray-600 font-serif">
+          {props.content}
+        </span>
+      )}
     </span>
   );
 }

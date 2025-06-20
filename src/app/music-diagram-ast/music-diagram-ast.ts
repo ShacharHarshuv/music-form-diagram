@@ -1,14 +1,14 @@
 import {
-  SectionAttributes,
   MusicDiagramDocument,
+  SectionAttributes,
 } from "@/app/music-diagram-document/music-diagram-document";
-import { sortBy, max, sumBy } from "lodash";
+import { max, sortBy, sumBy } from "lodash";
 import { initialStoreValue } from "../store/store";
 
 export interface Bar {
   type: "Bar";
   index: number;
-  // consider adding chords and other info later
+  content: string;
 }
 
 export interface InlineSection {
@@ -130,6 +130,7 @@ function createBarsWithSections(doc: MusicDiagramDocument) {
   const bars: Bar[] = Array.from({ length }, (_, i) => ({
     type: "Bar",
     index: i,
+    content: doc.bars?.[i] || "",
   }));
 
   const rootSection: Section = {

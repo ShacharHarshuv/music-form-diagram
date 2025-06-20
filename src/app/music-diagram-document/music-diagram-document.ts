@@ -16,4 +16,5 @@ export interface Section {
 export interface MusicDiagramDocument {
   length: number; // in bars
   sections: Section[];
+  bars?: Record<number, string>;
 }
