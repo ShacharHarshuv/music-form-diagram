@@ -39,9 +39,19 @@ export default function Bar(props: BarProps) {
         setEditValue(props.content || "");
       }}
     >
-      <span className="absolute top-0 left-0 text-xs text-gray-300 px-1">
+      <span className="absolute top-0 left-0 w-0 h-0 text-xs text-gray-300 px-1">
         {props.index + 1}
       </span>
+      {/* Dummy input to handle TAB navigation */}
+      {!isEditing && (
+        <input
+          type="text"
+          className="opacity-0 pointer-events-none absolute"
+          onFocus={() => {
+            setIsEditing(true);
+          }}
+        />
+      )}
       {isEditing ? (
         <input
           type="text"
