@@ -1,7 +1,7 @@
-import { create } from "zustand";
-import { devtools, persist } from "zustand/middleware";
 import { defaultDocument } from "@/app/default-document";
 import { MusicDiagramDocument } from "@/app/music-diagram-document/music-diagram-document";
+import { create } from "zustand";
+import { devtools, persist } from "zustand/middleware";
 
 export interface StoreValue {
   title: string;

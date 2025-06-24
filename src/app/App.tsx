@@ -2,6 +2,7 @@
 
 import { useActions } from "@/app/actions/actions";
 import { addBars } from "@/app/actions/add-bars";
+import { ShareButton } from "@/app/components/share-button";
 import SystemSegments from "@/app/components/system-segments";
 import {
   createMusicDiagramAst,
@@ -10,6 +11,7 @@ import {
 import { mutateStore } from "@/app/store/mutate-store";
 import { useStore } from "@/app/store/store";
 import { useEffect, useMemo } from "react";
+import { loadDocumentFromURL } from "./actions/share";
 import { NotesSection } from "./notes/notes-section";
 
 export function App() {
@@ -21,6 +23,10 @@ export function App() {
     return createMusicDiagramAst(diagramDocument, displayPreferences);
   }, [diagramDocument, displayPreferences]);
   const actions = useActions();
+
+  useEffect(() => {
+    loadDocumentFromURL();
+  }, []);
 
   useEffect(() => {
     actions.forEach((action) => action.register());
@@ -37,19 +43,22 @@ export function App() {
 
   return (
     <div className="mx-auto mt-5 max-w-7xl p-4">
-      <h1 className="mb-3 text-3xl font-bold">
-        <input
-          className="focus:ring-0 focus:outline-hidden"
-          type="text"
-          value={title}
-          placeholder="Untitled"
-          onInput={(e) => {
-            mutateStore((store) => {
-              store.title = e.currentTarget.value;
-            });
-          }}
-        />
-      </h1>
+      <div className="mb-3 flex items-center justify-between">
+        <h1 className="text-3xl font-bold">
+          <input
+            className="focus:ring-0 focus:outline-hidden"
+            type="text"
+            value={title}
+            placeholder="Untitled"
+            onInput={(e) => {
+              mutateStore((store) => {
+                store.title = e.currentTarget.value;
+              });
+            }}
+          />
+        </h1>
+        <ShareButton />
+      </div>
       <div className="grid grid-cols-[1fr_400px] gap-6">
         <DiagramBody diagram={diagramAst} />
         <NotesSection />

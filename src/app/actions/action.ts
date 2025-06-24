@@ -9,15 +9,16 @@ export function createAction({
   hotkey?: string;
   perform: () => void;
 }) {
+  const callbacks: (() => void)[] = [];
   const action = Object.assign(
     (event?: KeyboardEvent) => {
-      if (event) {
-        event.preventDefault();
-      }
+      if (event) event.preventDefault();
       perform();
+      callbacks.forEach((cb) => cb());
     },
     {
       description,
+      hotkey,
       register: () => {
         if (hotkey) {
           hotkeys(hotkey, action);
@@ -28,6 +29,13 @@ export function createAction({
         if (hotkey) {
           hotkeys.unbind(hotkey, action);
         }
+      },
+      onCall: (callback: () => void) => {
+        callbacks.push(callback);
+        return () => {
+          const idx = callbacks.indexOf(callback);
+          if (idx !== -1) callbacks.splice(idx, 1);
+        };
       },
     },
   );
