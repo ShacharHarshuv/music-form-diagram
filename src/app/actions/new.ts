@@ -1,6 +1,7 @@
 import { createAction } from "@/app/actions/action";
 import { defaultDocument } from "@/app/default-document";
 import { mutateStore } from "@/app/store/mutate-store";
+import { clearURL } from "./share";
 
 export const newFile = createAction({
   description: "Create New Section",
@@ -17,5 +18,6 @@ export const newFile = createAction({
       };
       store.title = "";
     });
+    clearURL();
   },
 });

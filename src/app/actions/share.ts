@@ -58,3 +58,9 @@ export const loadDocumentFromURL = () => {
     }
   }
 };
+
+export const clearURL = () => {
+  const url = new URL(window.location.href);
+  url.searchParams.delete(queryParamName);
+  window.history.replaceState({}, "", url.toString());
+};

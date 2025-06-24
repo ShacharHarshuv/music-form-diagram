@@ -1,6 +1,7 @@
 import { createAction } from "@/app/actions/action";
 import { openFile } from "@/app/file-management/file-management";
 import { mutateStore } from "@/app/store/mutate-store";
+import { clearURL } from "./share";
 
 export const open = createAction({
   description: "Save",
@@ -11,5 +12,6 @@ export const open = createAction({
       store.document = document;
       store.title = name;
     });
+    clearURL();
   },
 });
