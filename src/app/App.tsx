@@ -116,15 +116,7 @@ function DiagramBody({ diagram }: { diagram: Diagram }) {
   if (!diagram.segments.length) {
     return (
       <div>
-        <p>
-          The diagram is empty! Click the button below to{" "}
-          <span
-            className="cursor-pointer text-blue-500 hover:underline"
-            onClick={() => addBars()}
-          >
-            adding bars
-          </span>
-        </p>
+        <p>The diagram is empty! Click {addBars.icon} to add bars.</p>
       </div>
     );
   }
