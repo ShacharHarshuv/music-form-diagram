@@ -56,45 +56,54 @@ export function App() {
   }, []);
 
   return (
-    <div
-      className="mx-auto mt-5 max-w-7xl"
-      style={{
-        padding: `16px ${Math.max(16, 16 + nestingDepth * 7)}px`,
-      }}
-    >
-      {isLoading ? (
-        <div className="flex items-center justify-center min-h-[400px]">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading ...</p>
-          </div>
+    <div className="h-screen flex flex-col">
+      {/* Fixed Top Bar */}
+      <div className="flex-shrink-0 bg-white border-b border-gray-200 px-6 py-4 shadow-sm">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <h1 className="text-3xl font-bold min-w-0">
+            <input
+              className="focus:ring-0 focus:outline-hidden flex-shrink-0"
+              type="text"
+              value={title}
+              placeholder="Untitled"
+              onInput={(e) => {
+                mutateStore((store) => {
+                  store.title = e.currentTarget.value;
+                });
+              }}
+            />
+          </h1>
+          <ShareButton />
         </div>
-      ) : (
-        <>
-          <div className="mb-3 flex items-center justify-between">
-            <h1 className="text-3xl font-bold min-w-0">
-              <input
-                className="focus:ring-0 focus:outline-hidden flex-shrink-0"
-                type="text"
-                value={title}
-                placeholder="Untitled"
-                onInput={(e) => {
-                  mutateStore((store) => {
-                    store.title = e.currentTarget.value;
-                  });
-                }}
-              />
-            </h1>
-            <ShareButton />
-          </div>
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] md:grid-cols-[1fr_300px] sm:grid-cols-[1fr_150px] gap-6">
-            <DiagramBody diagram={diagramAst} />
-            <div className="max-sm:hidden">
-              <NotesSection />
+      </div>
+
+      {/* Main Content Area */}
+      <div className="flex-1 overflow-auto">
+        {isLoading ? (
+          <div className="flex items-center justify-center min-h-[400px]">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+              <p className="text-gray-600">Loading ...</p>
             </div>
           </div>
-        </>
-      )}
+        ) : (
+          <div
+            className="mx-auto mt-5 max-w-7xl pl-[var(--nesting-gap)] max-sm:pr-[var(--nesting-gap)]"
+            style={
+              {
+                "--nesting-gap": `${Math.max(16, 16 + nestingDepth * 7)}px`,
+              } as React.CSSProperties
+            }
+          >
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] md:grid-cols-[1fr_300px] sm:grid-cols-[1fr_150px] gap-6">
+              <DiagramBody diagram={diagramAst} />
+              <div className="max-sm:hidden">
+                <NotesSection />
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
