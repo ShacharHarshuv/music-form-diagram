@@ -13,7 +13,7 @@ import { mutateStore } from "@/app/store/mutate-store";
 import { useStore } from "@/app/store/store";
 import { max } from "lodash";
 import { useEffect, useMemo } from "react";
-import { loadDocumentFromURL } from "./actions/share";
+import { initializeURLMonitoring, loadDocumentFromURL } from "./actions/share";
 import { NotesSection } from "./notes/notes-section";
 
 export function App() {
@@ -32,7 +32,12 @@ export function App() {
   const actions = useActions();
 
   useEffect(() => {
-    loadDocumentFromURL();
+    const unsubscribePromise = loadDocumentFromURL().then(() =>
+      initializeURLMonitoring(),
+    );
+    return () => {
+      unsubscribePromise.then((unsubscribe) => unsubscribe());
+    };
   }, []);
 
   useEffect(() => {

@@ -1,5 +1,9 @@
-import { StoreValue, useStore } from "@/app/store/store";
+import { useStore } from "@/app/store/store";
 import { pick } from "lodash";
+import {
+  loadDocumentFromFirebase,
+  saveDocumentToFirebase,
+} from "../firebase/sharing";
 import { createAction } from "./action";
 
 const queryParamName = "diagram";
@@ -8,19 +12,28 @@ export const share = createAction({
   description: "Share",
   hotkey: "ctrl+alt+s",
   perform: async () => {
-    const encodedDoc = encodeDocument(useStore.getState());
-
+    const currentStoreValue = useStore.getState();
     const url = new URL(window.location.href);
-    url.searchParams.set(queryParamName, encodedDoc);
+    const existingId = url.searchParams.get(queryParamName);
 
-    window.history.replaceState({}, "", url.toString());
+    let shareId: string;
+
+    if (existingId) {
+      shareId = existingId;
+    } else {
+      shareId = await saveDocumentToFirebase(currentStoreValue);
+      url.searchParams.set(queryParamName, shareId);
+      window.history.replaceState({}, "", url.toString());
+    }
+
+    const shareUrl = url.toString();
 
     try {
-      await navigator.clipboard.writeText(url.toString());
+      await navigator.clipboard.writeText(shareUrl);
     } catch {
       // Fallback for older browsers
       const textArea = document.createElement("textarea");
-      textArea.value = url.toString();
+      textArea.value = shareUrl;
       document.body.appendChild(textArea);
       textArea.select();
       document.execCommand("copy");
@@ -29,32 +42,16 @@ export const share = createAction({
   },
 });
 
-type StoreValueForSharing = Pick<StoreValue, "document" | "title">;
-
-const encodeDocument = (storeValue: StoreValueForSharing) => {
-  const jsonString = JSON.stringify(pick(storeValue, ["document", "title"]));
-  return btoa(encodeURIComponent(jsonString));
-};
-
-const decodeDocument = (encoded: string) => {
-  try {
-    const jsonString = decodeURIComponent(atob(encoded));
-    return JSON.parse(jsonString) as StoreValueForSharing;
-  } catch {
-    return null;
-  }
-};
-
-export const loadDocumentFromURL = () => {
+export const loadDocumentFromURL = async () => {
   if (typeof window === "undefined") return;
 
   const urlParams = new URLSearchParams(window.location.search);
-  const encodedDoc = urlParams.get(queryParamName);
+  const diagramId = urlParams.get(queryParamName);
 
-  if (encodedDoc) {
-    const storeValue = decodeDocument(encodedDoc);
-    if (storeValue) {
-      useStore.setState(storeValue);
+  if (diagramId) {
+    const sharedDocument = await loadDocumentFromFirebase(diagramId);
+    if (sharedDocument) {
+      useStore.setState(sharedDocument);
     }
   }
 };
@@ -63,4 +60,37 @@ export const clearURL = () => {
   const url = new URL(window.location.href);
   url.searchParams.delete(queryParamName);
   window.history.replaceState({}, "", url.toString());
+};
+
+// Monitor store changes to clear URL when document is modified
+let lastDocumentState: string | null = null;
+
+export const initializeURLMonitoring = () => {
+  if (typeof window === "undefined") return () => {};
+
+  const existingId = new URL(window.location.href).searchParams.get(
+    queryParamName,
+  );
+
+  if (existingId) {
+    const currentState = useStore.getState();
+    lastDocumentState = JSON.stringify(
+      pick(currentState, ["document", "title"]),
+    );
+  }
+
+  // Subscribe to store changes
+  const unsubscribe = useStore.subscribe((state) => {
+    const currentDocumentState = JSON.stringify(
+      pick(state, ["document", "title"]),
+    );
+
+    if (lastDocumentState && currentDocumentState !== lastDocumentState) {
+      // Document has changed, clear the URL
+      clearURL();
+      lastDocumentState = null;
+    }
+  });
+
+  return unsubscribe;
 };
