@@ -13,7 +13,8 @@ import {
 import { mutateStore } from "@/app/store/mutate-store";
 import { useStore } from "@/app/store/store";
 import { max } from "lodash";
-import { useEffect, useMemo, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
+import { ReactNode, useEffect, useMemo, useState } from "react";
 import { createSection } from "./actions/create-section";
 import { initializeURLMonitoring, loadDocumentFromURL } from "./actions/share";
 import { NotesSection } from "./notes/notes-section";
@@ -148,9 +149,11 @@ function GettingStartedHints() {
 
   if (!document.length) {
     return (
-      <div>
-        <p>The diagram is empty! Click {addBars.icon} to add bars.</p>
-      </div>
+      <p>
+        <AnimatedText>
+          The diagram is empty! Click {addBars.icon} to add bars.
+        </AnimatedText>
+      </p>
     );
   }
   if (!document.sections.length) {
@@ -161,15 +164,21 @@ function GettingStartedHints() {
       return (
         <div>
           <p>
-            Click on some bars to select them, hold down Shift to select
-            multiple bars.
+            <AnimatedText>
+              Click on some bars to select them, hold down Shift to select
+              multiple bars.
+            </AnimatedText>
           </p>
         </div>
       );
 
     return (
       <div>
-        <p>Click on {createSection.icon} to add a section.</p>
+        <p>
+          <AnimatedText>
+            Click on {createSection.icon} to add a section.
+          </AnimatedText>
+        </p>
       </div>
     );
   }
@@ -177,10 +186,46 @@ function GettingStartedHints() {
   if (document.sections.every((section) => !section.attributes.name)) {
     return (
       <div>
-        <p>Click above the section to name it.</p>
+        <p>
+          <AnimatedText>Click above the section to name it.</AnimatedText>
+        </p>
       </div>
     );
   }
 
   return null;
+}
+
+function AnimatedText({ children }: { children: ReactNode }) {
+  const splitNode = (node: ReactNode, startIndex: number): ReactNode[] => {
+    if (typeof node === "string") {
+      return node.split("");
+    }
+
+    if (Array.isArray(node)) {
+      return node.flatMap((child) => splitNode(child, startIndex));
+    }
+
+    return [node];
+  };
+
+  const elements = splitNode(children, 0);
+  const contentKey = elements.join("");
+
+  return (
+    <AnimatePresence mode="sync">
+      <motion.span key={contentKey} exit={{ opacity: 0 }} className="absolute">
+        {elements.map((element, index) => (
+          <motion.span
+            key={`${contentKey}-${index}`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: index * 0.015, duration: 0 }}
+          >
+            {element}
+          </motion.span>
+        ))}
+      </motion.span>
+    </AnimatePresence>
+  );
 }
