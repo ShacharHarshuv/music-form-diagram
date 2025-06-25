@@ -5,7 +5,6 @@ const subscribers = new Set<() => void>();
 
 export const NotesAnchors = {
   register: (id: string, element: HTMLElement | null) => {
-    console.log("register", id, element);
     anchors[id] = element;
     subscribers.forEach((callback) => callback());
   },

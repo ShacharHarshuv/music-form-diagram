@@ -7,9 +7,11 @@ import SystemSegments from "@/app/components/system-segments";
 import {
   createMusicDiagramAst,
   Diagram,
+  SystemSegment,
 } from "@/app/music-diagram-ast/music-diagram-ast";
 import { mutateStore } from "@/app/store/mutate-store";
 import { useStore } from "@/app/store/store";
+import { max } from "lodash";
 import { useEffect, useMemo } from "react";
 import { loadDocumentFromURL } from "./actions/share";
 import { NotesSection } from "./notes/notes-section";
@@ -22,6 +24,11 @@ export function App() {
   const diagramAst = useMemo(() => {
     return createMusicDiagramAst(diagramDocument, displayPreferences);
   }, [diagramDocument, displayPreferences]);
+
+  const nestingDepth = useMemo(() => {
+    return systemSectionsNestingDepth(diagramAst.segments);
+  }, [diagramAst.segments]);
+
   const actions = useActions();
 
   useEffect(() => {
@@ -42,7 +49,12 @@ export function App() {
   }, []);
 
   return (
-    <div className="mx-auto mt-5 max-w-7xl p-4">
+    <div
+      className="mx-auto mt-5 max-w-7xl"
+      style={{
+        padding: `16px ${Math.max(16, 16 + nestingDepth * 7)}px`,
+      }}
+    >
       <div className="mb-3 flex items-center justify-between">
         <h1 className="text-3xl font-bold min-w-0">
           <input
@@ -91,4 +103,18 @@ function DiagramBody({ diagram }: { diagram: Diagram }) {
       <SystemSegments segments={diagram.segments} />
     </div>
   );
+}
+
+function systemSectionsNestingDepth(segments: SystemSegment[]): number {
+  console.log("calculating nesting depth", segments);
+
+  const maxInnerDepth = max(
+    segments.map((segment) =>
+      segment.type === "MultiSystemSection"
+        ? systemSectionsNestingDepth(segment.segments)
+        : 0,
+    ),
+  );
+
+  return maxInnerDepth ? maxInnerDepth + 1 : 1;
 }
