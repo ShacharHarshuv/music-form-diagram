@@ -1,5 +1,7 @@
+import React from "react";
 import { createAction } from "@/app/actions/action";
 import { mutateStore } from "@/app/store/mutate-store";
+import { AddIcon } from "../icons/add-icon";
 
 export const addBars = createAction({
   description: "Add Bars",
@@ -14,4 +16,5 @@ export const addBars = createAction({
       document.length += numberOfBars;
     });
   },
+  icon: <AddIcon />,
 });

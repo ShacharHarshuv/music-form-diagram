@@ -2,6 +2,7 @@ import { createAction } from "@/app/actions/action";
 import { current } from "@/app/store/current";
 import { mutateStore } from "@/app/store/mutate-store";
 import { selectedRange } from "@/app/store/selected-range";
+import { DeleteIcon } from "../icons/delete-icon";
 
 export const deleteSelected = createAction({
   hotkey: "delete",
@@ -64,4 +65,5 @@ export const deleteSelected = createAction({
       });
     }
   },
+  icon: <DeleteIcon />,
 });

@@ -4,6 +4,7 @@ import { useActions } from "@/app/actions/actions";
 import { addBars } from "@/app/actions/add-bars";
 import { ShareButton } from "@/app/components/share-button";
 import SystemSegments from "@/app/components/system-segments";
+import { Toolbar } from "@/app/components/toolbar";
 import {
   createMusicDiagramAst,
   Diagram,
@@ -58,23 +59,26 @@ export function App() {
   return (
     <div className="h-screen flex flex-col">
       {/* Fixed Top Bar */}
-      <div className="flex-shrink-0 bg-white border-b border-gray-200 px-6 py-4 shadow-sm">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <h1 className="text-3xl font-bold min-w-0">
-            <input
-              className="focus:ring-0 focus:outline-hidden flex-shrink-0"
-              type="text"
-              value={title}
-              placeholder="Untitled"
-              onInput={(e) => {
-                mutateStore((store) => {
-                  store.title = e.currentTarget.value;
-                });
-              }}
-            />
-          </h1>
-          <ShareButton />
+      <div className="flex-shrink-0 bg-white border-b border-gray-200 shadow-sm">
+        <div className="max-w-7xl mx-auto max-sm:px-6 py-4">
+          <div className="flex items-center justify-between">
+            <h1 className="text-3xl font-bold min-w-0">
+              <input
+                className="focus:ring-0 focus:outline-hidden flex-shrink-0"
+                type="text"
+                value={title}
+                placeholder="Untitled"
+                onInput={(e) => {
+                  mutateStore((store) => {
+                    store.title = e.currentTarget.value;
+                  });
+                }}
+              />
+            </h1>
+            <ShareButton />
+          </div>
         </div>
+        <Toolbar />
       </div>
 
       {/* Main Content Area */}

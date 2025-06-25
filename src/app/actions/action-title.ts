@@ -5,9 +5,15 @@ export function actionTitle(action: {
   const { description, hotkey } = action;
   if (hotkey) {
     const formattedHotkey = hotkey
-      .split("+")
-      .map((key) => key.charAt(0).toUpperCase() + key.slice(1))
-      .join("+");
+      .split(",")
+      .map((option) =>
+        option
+          .trim()
+          .split("+")
+          .map((key) => key.charAt(0).toUpperCase() + key.slice(1))
+          .join("+"),
+      )
+      .join(", ");
     return `${description} (${formattedHotkey})`;
   }
   return description;

@@ -1,13 +1,15 @@
 import hotkeys from "hotkeys-js";
+import { ReactNode } from "react";
 
 export function createAction({
-  description,
   hotkey,
   perform,
+  ...rest
 }: {
   description: string;
   hotkey?: string;
   perform: () => void;
+  icon?: ReactNode;
 }) {
   const callbacks: (() => void)[] = [];
   const action = Object.assign(
@@ -17,8 +19,8 @@ export function createAction({
       callbacks.forEach((cb) => cb());
     },
     {
-      description,
       hotkey,
+      ...rest,
       register: () => {
         if (hotkey) {
           hotkeys(hotkey, action);
@@ -42,3 +44,5 @@ export function createAction({
 
   return action;
 }
+
+export type Action = ReturnType<typeof createAction>;
