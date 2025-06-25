@@ -14,6 +14,7 @@ import { mutateStore } from "@/app/store/mutate-store";
 import { useStore } from "@/app/store/store";
 import { max } from "lodash";
 import { useEffect, useMemo, useState } from "react";
+import { createSection } from "./actions/create-section";
 import { initializeURLMonitoring, loadDocumentFromURL } from "./actions/share";
 import { NotesSection } from "./notes/notes-section";
 
@@ -113,18 +114,17 @@ export function App() {
 }
 
 function DiagramBody({ diagram }: { diagram: Diagram }) {
-  if (!diagram.segments.length) {
-    return (
-      <div>
-        <p>The diagram is empty! Click {addBars.icon} to add bars.</p>
-      </div>
-    );
-  }
-
   return (
-    <div className="grid grid-cols-8 gap-y-3">
-      <SystemSegments segments={diagram.segments} />
-    </div>
+    <>
+      <div className="col-span-2">
+        <GettingStartedHints />
+      </div>
+      {diagram.segments.length ? (
+        <div className="grid grid-cols-8 gap-y-3">
+          <SystemSegments segments={diagram.segments} />
+        </div>
+      ) : null}
+    </>
   );
 }
 
@@ -140,4 +140,47 @@ function systemSectionsNestingDepth(segments: SystemSegment[]): number {
   );
 
   return maxInnerDepth ? maxInnerDepth + 1 : 1;
+}
+
+function GettingStartedHints() {
+  const document = useStore((state) => state.document);
+  const selection = useStore((state) => state.selection);
+
+  if (!document.length) {
+    return (
+      <div>
+        <p>The diagram is empty! Click {addBars.icon} to add bars.</p>
+      </div>
+    );
+  }
+  if (!document.sections.length) {
+    if (
+      !selection.start ||
+      (selection.end && selection.end - selection.start < 1)
+    )
+      return (
+        <div>
+          <p>
+            Click on some bars to select them, hold down Shift to select
+            multiple bars.
+          </p>
+        </div>
+      );
+
+    return (
+      <div>
+        <p>Click on {createSection.icon} to add a section.</p>
+      </div>
+    );
+  }
+
+  if (document.sections.every((section) => !section.attributes.name)) {
+    return (
+      <div>
+        <p>Click above the section to name it.</p>
+      </div>
+    );
+  }
+
+  return null;
 }
