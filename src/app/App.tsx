@@ -88,7 +88,7 @@ export function App() {
           </div>
         ) : (
           <div
-            className="mx-auto mt-5 max-w-7xl pl-[var(--nesting-gap)] max-sm:pr-[var(--nesting-gap)]"
+            className="mx-auto mt-5 max-w-7xl max-sm:pr-[var(--nesting-gap)] max-[1380px]:pl-[var(--nesting-gap)]"
             style={
               {
                 "--nesting-gap": `${Math.max(16, 16 + nestingDepth * 7)}px`,
