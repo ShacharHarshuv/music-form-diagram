@@ -59,9 +59,11 @@ export function App() {
         </h1>
         <ShareButton />
       </div>
-      <div className="grid grid-cols-[1fr_400px] gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] md:grid-cols-[1fr_300px] sm:grid-cols-[1fr_150px] gap-6">
         <DiagramBody diagram={diagramAst} />
-        <NotesSection />
+        <div className="max-sm:hidden">
+          <NotesSection />
+        </div>
       </div>
     </div>
   );
