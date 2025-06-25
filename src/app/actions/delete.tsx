@@ -3,10 +3,15 @@ import { current } from "@/app/store/current";
 import { mutateStore } from "@/app/store/mutate-store";
 import { selectedRange } from "@/app/store/selected-range";
 import { DeleteIcon } from "../icons/delete-icon";
+import { useStore } from "../store/store";
 
 export const deleteSelected = createAction({
   hotkey: "delete",
   description: "Delete selected",
+  useIsAvailable: () => {
+    const selection = useStore(({ selection }) => selection);
+    return !!selection.start || !!selection.section;
+  },
   perform: () => {
     const range = selectedRange();
 

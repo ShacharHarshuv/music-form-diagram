@@ -10,6 +10,7 @@ export function createAction({
   hotkey?: string;
   perform: () => void;
   icon?: ReactNode;
+  useIsAvailable?: () => boolean;
 }) {
   const callbacks: (() => void)[] = [];
   const action = Object.assign(
