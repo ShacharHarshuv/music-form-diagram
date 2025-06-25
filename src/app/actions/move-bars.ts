@@ -1,20 +1,17 @@
 import { createAction } from "@/app/actions/action";
+import { MoveLeftIcon } from "@/app/icons/move-left-icon";
+import { MoveRightIcon } from "@/app/icons/move-right-icon";
 import { mutateStore } from "@/app/store/mutate-store";
-import { sortBy, first } from "lodash";
 import { selectedRange } from "@/app/store/selected-range";
+import { first, sortBy } from "lodash";
+import React from "react";
+
+// todo: update this action to work with the contents of the bars
 
 function moveBars(direction: -1 | 1) {
   return () => {
     const leavingSide = direction === -1 ? "start" : "end";
     const enteringSide = direction === -1 ? "end" : "start";
-    console.log(
-      "direction",
-      direction,
-      "leavingSide",
-      leavingSide,
-      "enteringSide",
-      enteringSide,
-    );
 
     mutateStore(({ selection, document }) => {
       const range = selectedRange(selection);
@@ -40,7 +37,6 @@ function moveBars(direction: -1 | 1) {
       const firstLeavingSection = first(leavingSections);
 
       if (firstLeavingSection) {
-        console.log("leaving section");
         if (
           firstLeavingSection[enteringSide] === currentSelection[enteringSide]
         ) {
@@ -76,11 +72,13 @@ export const moveBarsActions = [
   createAction({
     description: "Move Bars Back",
     hotkey: "alt+left",
+    icon: React.createElement(MoveLeftIcon),
     perform: moveBars(-1),
   }),
   createAction({
     description: "Move Bars Forward",
     hotkey: "alt+right",
+    icon: React.createElement(MoveRightIcon),
     perform: moveBars(+1),
   }),
 ];

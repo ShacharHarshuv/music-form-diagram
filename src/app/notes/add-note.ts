@@ -1,10 +1,13 @@
+import React from "react";
 import { createAction } from "../actions/action";
-import { current } from "../store/current";
 import { mutateSection } from "../components/mutate-section";
+import { NoteIcon } from "../icons/note-icon";
+import { current } from "../store/current";
 
 export const addNotes = createAction({
   description: "Add Note",
   hotkey: "n",
+  icon: React.createElement(NoteIcon),
   perform: () => {
     const selectedSectionId = current().selection.section;
     if (!selectedSectionId) {

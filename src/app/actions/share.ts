@@ -1,5 +1,7 @@
+import { ShareIcon } from "@/app/icons/share-icon";
 import { useStore } from "@/app/store/store";
 import { pick } from "lodash";
+import React from "react";
 import {
   loadDocumentFromFirebase,
   saveDocumentToFirebase,
@@ -11,6 +13,7 @@ const queryParamName = "id";
 export const share = createAction({
   description: "Share",
   hotkey: "ctrl+alt+s",
+  icon: React.createElement(ShareIcon),
   perform: async () => {
     const currentStoreValue = useStore.getState();
     const url = new URL(window.location.href);
