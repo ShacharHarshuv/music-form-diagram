@@ -6,7 +6,7 @@ import {
 } from "../firebase/sharing";
 import { createAction } from "./action";
 
-const queryParamName = "diagram";
+const queryParamName = "id";
 
 export const share = createAction({
   description: "Share",
