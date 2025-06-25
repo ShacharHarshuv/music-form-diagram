@@ -12,7 +12,7 @@ import {
 import { mutateStore } from "@/app/store/mutate-store";
 import { useStore } from "@/app/store/store";
 import { max } from "lodash";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { initializeURLMonitoring, loadDocumentFromURL } from "./actions/share";
 import { NotesSection } from "./notes/notes-section";
 
@@ -20,6 +20,7 @@ export function App() {
   const diagramDocument = useStore((state) => state.document);
   const displayPreferences = useStore((state) => state.displayPreferences);
   const title = useStore(({ title }) => title);
+  const [isLoading, setIsLoading] = useState(true);
 
   const diagramAst = useMemo(() => {
     return createMusicDiagramAst(diagramDocument, displayPreferences);
@@ -32,9 +33,10 @@ export function App() {
   const actions = useActions();
 
   useEffect(() => {
-    const unsubscribePromise = loadDocumentFromURL().then(() =>
-      initializeURLMonitoring(),
-    );
+    const unsubscribePromise = loadDocumentFromURL().then(() => {
+      setIsLoading(false);
+      return initializeURLMonitoring();
+    });
     return () => {
       unsubscribePromise.then((unsubscribe) => unsubscribe());
     };
@@ -60,28 +62,39 @@ export function App() {
         padding: `16px ${Math.max(16, 16 + nestingDepth * 7)}px`,
       }}
     >
-      <div className="mb-3 flex items-center justify-between">
-        <h1 className="text-3xl font-bold min-w-0">
-          <input
-            className="focus:ring-0 focus:outline-hidden flex-shrink-0"
-            type="text"
-            value={title}
-            placeholder="Untitled"
-            onInput={(e) => {
-              mutateStore((store) => {
-                store.title = e.currentTarget.value;
-              });
-            }}
-          />
-        </h1>
-        <ShareButton />
-      </div>
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] md:grid-cols-[1fr_300px] sm:grid-cols-[1fr_150px] gap-6">
-        <DiagramBody diagram={diagramAst} />
-        <div className="max-sm:hidden">
-          <NotesSection />
+      {isLoading ? (
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading ...</p>
+          </div>
         </div>
-      </div>
+      ) : (
+        <>
+          <div className="mb-3 flex items-center justify-between">
+            <h1 className="text-3xl font-bold min-w-0">
+              <input
+                className="focus:ring-0 focus:outline-hidden flex-shrink-0"
+                type="text"
+                value={title}
+                placeholder="Untitled"
+                onInput={(e) => {
+                  mutateStore((store) => {
+                    store.title = e.currentTarget.value;
+                  });
+                }}
+              />
+            </h1>
+            <ShareButton />
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] md:grid-cols-[1fr_300px] sm:grid-cols-[1fr_150px] gap-6">
+            <DiagramBody diagram={diagramAst} />
+            <div className="max-sm:hidden">
+              <NotesSection />
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
