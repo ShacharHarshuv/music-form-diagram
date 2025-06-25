@@ -5,11 +5,13 @@ import { mutateStore } from "@/app/store/mutate-store";
 import { selectedRange } from "@/app/store/selected-range";
 import React from "react";
 import { v4 as uuidv4 } from "uuid";
+import { useIsBarsSelected } from "./_use-is-bars-selected";
 
 export const createSection = createAction({
   description: "Create New Section",
   hotkey: "s",
   icon: React.createElement(SectionIcon),
+  useIsAvailable: useIsBarsSelected,
   perform: () => {
     const range = selectedRange();
     if (!range) {

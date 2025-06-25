@@ -10,22 +10,22 @@ export function SectionIcon() {
       <path
         fill="none"
         stroke="#000"
-        stroke-width="2"
-        stroke-linejoin="round"
+        strokeWidth="2"
+        strokeLinejoin="round"
         d="M2 19.6V14.3H22v5.3"
       />
       <path
         fill="none"
         stroke="#000"
-        stroke-width="2"
-        stroke-linejoin="round"
+        strokeWidth="2"
+        strokeLinejoin="round"
         d="M2.1 8.6H9"
       />
       <path
         fill="none"
         stroke="#000"
-        stroke-width="2"
-        stroke-linejoin="round"
+        strokeWidth="2"
+        strokeLinejoin="round"
         d="M5.5 5.2V12"
       />
     </svg>

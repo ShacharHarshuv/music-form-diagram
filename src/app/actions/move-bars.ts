@@ -5,6 +5,7 @@ import { mutateStore } from "@/app/store/mutate-store";
 import { selectedRange } from "@/app/store/selected-range";
 import { first, sortBy } from "lodash";
 import React from "react";
+import { useIsBarsSelected } from "./_use-is-bars-selected";
 
 // todo: update this action to work with the contents of the bars
 
@@ -74,11 +75,13 @@ export const moveBarsActions = [
     hotkey: "alt+left",
     icon: React.createElement(MoveLeftIcon),
     perform: moveBars(-1),
+    useIsAvailable: useIsBarsSelected,
   }),
   createAction({
     description: "Move Bars Forward",
     hotkey: "alt+right",
     icon: React.createElement(MoveRightIcon),
     perform: moveBars(+1),
+    useIsAvailable: useIsBarsSelected,
   }),
 ];
