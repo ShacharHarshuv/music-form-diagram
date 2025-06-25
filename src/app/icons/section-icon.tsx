@@ -2,15 +2,31 @@ export function SectionIcon() {
   return (
     <svg
       className="w-5 h-5"
-      fill="none"
-      stroke="currentColor"
+      width="24"
+      height="24"
       viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
     >
       <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M4 6h16M4 10h16M4 14h16M4 18h16"
+        fill="none"
+        stroke="#000"
+        stroke-width="2"
+        stroke-linejoin="round"
+        d="M2 19.6V14.3H22v5.3"
+      />
+      <path
+        fill="none"
+        stroke="#000"
+        stroke-width="2"
+        stroke-linejoin="round"
+        d="M2.1 8.6H9"
+      />
+      <path
+        fill="none"
+        stroke="#000"
+        stroke-width="2"
+        stroke-linejoin="round"
+        d="M5.5 5.2V12"
       />
     </svg>
   );
