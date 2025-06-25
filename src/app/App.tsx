@@ -44,9 +44,9 @@ export function App() {
   return (
     <div className="mx-auto mt-5 max-w-7xl p-4">
       <div className="mb-3 flex items-center justify-between">
-        <h1 className="text-3xl font-bold">
+        <h1 className="text-3xl font-bold min-w-0">
           <input
-            className="focus:ring-0 focus:outline-hidden"
+            className="focus:ring-0 focus:outline-hidden flex-shrink-0"
             type="text"
             value={title}
             placeholder="Untitled"
