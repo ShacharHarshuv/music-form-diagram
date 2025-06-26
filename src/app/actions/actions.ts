@@ -1,6 +1,8 @@
 import { addBars } from "@/app/actions/add-bars";
 import { createSection } from "@/app/actions/create-section";
 import { deleteSelected } from "@/app/actions/delete";
+import { deselectEverything } from "@/app/actions/deselect";
+import { expandSelectionActions } from "@/app/actions/expand-selection";
 import { moveBarsActions } from "@/app/actions/move-bars";
 import { navigationActions } from "@/app/actions/navigations";
 import { newFile } from "@/app/actions/new";
@@ -20,7 +22,9 @@ export const useActions = () => [
   save,
   open,
   newFile,
+  deselectEverything,
   ...navigationActions,
+  ...expandSelectionActions,
   ...moveBarsActions,
   addNotes,
   share,

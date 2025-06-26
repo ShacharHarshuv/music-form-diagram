@@ -10,7 +10,7 @@ export const deleteSelected = createAction({
   description: "Delete selected",
   useIsAvailable: () => {
     const selection = useStore(({ selection }) => selection);
-    return !!selection.start || !!selection.section;
+    return selection.start !== null || selection.section !== null;
   },
   perform: () => {
     const range = selectedRange();
