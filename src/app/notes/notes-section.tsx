@@ -53,7 +53,7 @@ export function NotesSection() {
   }, [notesPreprocess, bottom, top]);
 
   return (
-    <div className="relative p-3" ref={ref as Ref<HTMLDivElement>}>
+    <div className="relative" ref={ref as Ref<HTMLDivElement>}>
       {notes.map((note) => (
         <Note {...note} key={note.id} />
       ))}

@@ -63,7 +63,7 @@ export function App() {
     <div className="h-screen flex flex-col">
       {/* Fixed Top Bar */}
       <div className="flex-shrink-0 bg-white border-b border-gray-200 shadow-sm">
-        <div className="max-w-7xl mx-auto max-sm:px-6 py-4">
+        <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <h1 className="text-3xl font-bold min-w-0">
               <input
@@ -98,7 +98,7 @@ export function App() {
           </div>
         ) : (
           <div
-            className="mx-auto mt-5 max-w-7xl max-sm:pr-[var(--nesting-gap)] max-[1380px]:pl-[var(--nesting-gap)]"
+            className="mx-auto mt-5 max-w-7xl max-sm:pr-[var(--nesting-gap)] max-[1380px]:pl-[var(--nesting-gap)] pr-6"
             style={
               {
                 "--nesting-gap": `${Math.max(16, 16 + nestingDepth * 7)}px`,
