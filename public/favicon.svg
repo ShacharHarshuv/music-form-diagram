@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="24"
+   height="24"
+   viewBox="0 0 6.3499999 6.35"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+   sodipodi:docname="open-formata-favicon.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="20.256924"
+     inkscape:cx="16.735019"
+     inkscape:cy="12.958532"
+     inkscape:window-width="1920"
+     inkscape:window-height="1106"
+     inkscape:window-x="-11"
+     inkscape:window-y="-11"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       d="m 1.413733,1.6470186 c -0.311474,0 -0.55620394,0.1334889 -0.55620394,0.3003501 V 4.415336 c 0,0.077869 0.122365,0.1446135 0.26697794,0.1446135 0.155737,0 0.278102,-0.066744 0.278102,-0.1446135 V 2.7343586 c 0,-0.1334889 0.347655,-0.1795079 1.7492887,-0.1795079 1.4016344,0 1.8199775,0.046019 1.8199775,0.1795079 V 4.415336 c 0,0.077869 0.1223646,0.1446135 0.2669779,0.1446135 0.1557372,0 0.2781018,-0.066744 0.2781018,-0.1446135 V 1.9473687 c 0,-0.1668612 -0.24473,-0.3003501 -0.556204,-0.3003501 z m 2.3499895,2.1671501 c 0,-0.3337227 -0.2669778,-0.6007006 -0.6118248,-0.6007006 -0.3337219,0 -0.6006998,0.2669779 -0.6006998,0.6007006 0,0.3337223 0.2669779,0.611824 0.6006998,0.611824 0.344847,0 0.6118248,-0.2781017 0.6118248,-0.611824 z"
+       id="text6"
+       style="font-size:138.645px;line-height:1.85;font-family:Bravura;-inkscape-font-specification:Bravura;stroke-width:0.115839;stroke-linejoin:round"
+       aria-label=""
+       sodipodi:nodetypes="sssssssssssssssssss" />
+  </g>
+</svg>
