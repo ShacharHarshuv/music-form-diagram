@@ -26,7 +26,7 @@ export function ShareButton() {
       title={actionTitle(share)}
     >
       <ShareIcon />
-      {copied ? "Copied!" : "Share"}
+      <span className="max-sm:hidden">{copied ? "Copied!" : "Share"}</span>
     </button>
   );
 }

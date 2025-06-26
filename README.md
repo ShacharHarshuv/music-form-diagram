@@ -2,8 +2,8 @@
 
 # Open Formata
 
-**Open Formata** is the open source app for creating beautiful musical form diagrams quickly. I created this for myself to help me analyze more songs faster and learn about musical form. You can define the number of bars, and split them into nested sections with 
-descriptions, colors, and notes. 
+**Open Formata** is the open source app for creating beautiful musical form diagrams quickly. I created this for myself to help me analyze more songs faster and learn about musical form. You can define the number of bars, and split them into nested sections with
+descriptions, colors, and notes.
 
 ![image](https://github.com/user-attachments/assets/39555dcd-ce61-42e4-894b-7102308e1612)
 

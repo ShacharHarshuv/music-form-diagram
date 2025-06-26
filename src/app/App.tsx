@@ -2,6 +2,7 @@
 
 import { useActions } from "@/app/actions/actions";
 import { addBars } from "@/app/actions/add-bars";
+import { GitHubButton } from "@/app/components/github-button";
 import { ShareButton } from "@/app/components/share-button";
 import SystemSegments from "@/app/components/system-segments";
 import { Toolbar } from "@/app/components/toolbar";
@@ -77,7 +78,10 @@ export function App() {
                 }}
               />
             </h1>
-            <ShareButton />
+            <div className="flex gap-2">
+              <ShareButton />
+              <GitHubButton />
+            </div>
           </div>
         </div>
         <Toolbar />
