@@ -18,20 +18,20 @@ export default function Bar(props: BarProps) {
     return props.index >= min && props.index <= max;
   });
 
-  const isFirstSelected = useStore(() => {
+  const isOneSelected = useStore(() => {
     const range = selectedRange();
     if (!range) {
       return false;
     }
-    const [min] = range;
-    return props.index === min;
+    const [min, max] = range;
+    return min === max && min === props.index;
   });
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (
         event.key === "Enter" &&
-        isFirstSelected &&
+        isOneSelected &&
         !isEditing &&
         !isWritableFocus()
       ) {
@@ -45,7 +45,7 @@ export default function Bar(props: BarProps) {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isFirstSelected, isEditing, props.content]);
+  }, [isOneSelected, isEditing, props.content]);
 
   return (
     <span

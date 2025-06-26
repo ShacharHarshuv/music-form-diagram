@@ -22,6 +22,11 @@ export function SectionName({
       className="field-sizing-content max-w-full min-w-4 focus:ring-0 focus:outline-hidden"
       value={name ?? ""}
       onInput={(e) => onRename(e.currentTarget.value)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === "Escape") {
+          e.currentTarget.blur();
+        }
+      }}
     />
   );
 }
