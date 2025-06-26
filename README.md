@@ -1,5 +1,4 @@
-
-![open-formata](https://github.com/user-attachments/assets/8d64eba2-ff50-424f-a5ec-97862088c43d)
+<img src="https://github.com/user-attachments/assets/8d64eba2-ff50-424f-a5ec-97862088c43d" alt="open-formata" width="400" />
 
 # Open Formata
 
@@ -7,7 +6,6 @@
 descriptions, colors, and notes. 
 
 ![image](https://github.com/user-attachments/assets/39555dcd-ce61-42e4-894b-7102308e1612)
-
 
 ## Contributions
 
