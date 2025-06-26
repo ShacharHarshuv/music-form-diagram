@@ -105,7 +105,7 @@ export function App() {
               } as React.CSSProperties
             }
           >
-            <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] md:grid-cols-[1fr_300px] sm:grid-cols-[1fr_150px] gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] md:grid-cols-[1fr_300px] sm:grid-cols-[1fr_150px] gap-[var(--nesting-gap)]">
               <DiagramBody diagram={diagramAst} />
               <div className="max-sm:hidden">
                 <NotesSection />
