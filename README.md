@@ -7,6 +7,12 @@ descriptions, colors, and notes.
 
 ![image](https://github.com/user-attachments/assets/39555dcd-ce61-42e4-894b-7102308e1612)
 
+## Examples
+
+- [Proud of Your Boy](https://openformata.com/?id=4fefb4ba-2802-4936-b538-232b0b8ee36b) (from Aladdin, by Alan Menken)
+- [Kidnap the Sandy Claws](https://openformata.com/?id=05b02942-4ae9-46a8-94c7-78b336f80071) (from The Nightmare Before Christmas, by Danny Elfman)
+- [Put On Your Sunday Clothes](https://openformata.com/?id=fe8c2e1a-8766-45da-bdb7-e448d9b93d33) (from Hello, Dolley!, by Jerry Herman)
+
 ## Contributions
 
 First, run the development server:
