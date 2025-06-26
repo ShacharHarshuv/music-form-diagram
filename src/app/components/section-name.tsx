@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 export function SectionName({
   inputRef,
@@ -9,6 +9,12 @@ export function SectionName({
   name: string | undefined;
   onRename: (name: string) => void;
 }) {
+  useEffect(() => {
+    if (inputRef?.current) {
+      inputRef.current.focus();
+    }
+  }, []);
+
   return (
     <input
       ref={inputRef}
