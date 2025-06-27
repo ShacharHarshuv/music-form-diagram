@@ -25,6 +25,7 @@ export function NotesSection({
     // }
 
     console.log("sections", sections);
+    console.log("anchors", anchors);
 
     return sections
       .map((s) => {
