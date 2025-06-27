@@ -18,7 +18,7 @@ export function Note(props: NoteProps) {
   const { color } = useSection(props.section);
 
   useEffect(() => {
-    inputRef.current?.focus();
+    inputRef.current?.focus({ preventScroll: true });
   }, []);
 
   /* TODO: use a smarter editor with markdown support */
