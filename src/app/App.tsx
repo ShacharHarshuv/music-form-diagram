@@ -15,7 +15,7 @@ import { mutateStore } from "@/app/store/mutate-store";
 import { useStore } from "@/app/store/store";
 import { max } from "lodash";
 import { AnimatePresence, motion } from "motion/react";
-import { ReactNode, useEffect, useMemo, useState } from "react";
+import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { createSection } from "./actions/create-section";
 import { initializeURLMonitoring, loadDocumentFromURL } from "./actions/share";
 import { NotesSection } from "./notes/notes-section";
@@ -59,6 +59,8 @@ export function App() {
     (window as any).mutateStore = mutateStore;
   }, []);
 
+  const mainContentRef = useRef<HTMLDivElement | null>(null);
+
   return (
     <div className="h-screen flex flex-col">
       {/* Fixed Top Bar */}
@@ -98,6 +100,7 @@ export function App() {
           </div>
         ) : (
           <div
+            ref={mainContentRef}
             className="mx-auto mt-5 max-w-7xl max-sm:pr-[var(--nesting-gap)] max-[1380px]:pl-[var(--nesting-gap)] pr-6"
             style={
               {
@@ -108,7 +111,7 @@ export function App() {
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] md:grid-cols-[1fr_300px] sm:grid-cols-[1fr_150px] gap-[var(--nesting-gap)]">
               <DiagramBody diagram={diagramAst} />
               <div className="max-sm:hidden">
-                <NotesSection />
+                <NotesSection mainContentRef={mainContentRef} />
               </div>
             </div>
           </div>
@@ -121,7 +124,7 @@ export function App() {
 function DiagramBody({ diagram }: { diagram: Diagram }) {
   return (
     <>
-      <div className="col-span-2">
+      <div className="col-span-2 empty:hidden">
         <GettingStartedHints />
       </div>
       {diagram.segments.length ? (

@@ -4,18 +4,22 @@ import { useStore } from "../store/store";
 import { Note, NoteProps } from "./Note";
 import { NotesAnchors } from "./notes-anchors";
 import { useBottom } from "./positioning/bottom";
-import { getTop, useTop } from "./positioning/top";
+import { getTop } from "./positioning/top";
 
-export function NotesSection() {
+export function NotesSection({
+  mainContentRef,
+}: {
+  mainContentRef: React.RefObject<HTMLDivElement | null>;
+}) {
   const sections = useStore((state) => state.document.sections);
 
   const ref = useRef<HTMLElement>(null);
-  const top = useTop(ref);
-  const bottom = useBottom(ref);
+  // const top = useTop(ref, mainContentRef);
+  const bottom = useBottom(ref, mainContentRef);
   const anchors = NotesAnchors.useAnchors();
 
   const notesPreprocess = useMemo(() => {
-    if (!top) {
+    if (!mainContentRef.current) {
       return [];
     }
 
@@ -33,12 +37,12 @@ export function NotesSection() {
           content: s.attributes.notes,
           anchor,
           section: s,
-          top: getTop(anchor) - top,
+          top: getTop(anchor, mainContentRef.current!),
         };
       })
       .filter((n) => n !== null)
       .sort((a, b) => a.top - b.top);
-  }, [sections, anchors, top]);
+  }, [sections, anchors, mainContentRef]);
 
   const notes = useMemo(() => {
     return notesPreprocess.map((note, index): NoteProps => {
@@ -50,7 +54,7 @@ export function NotesSection() {
         bottom: nextNote ? nextNote.top : bottom && top ? bottom - top : null,
       };
     });
-  }, [notesPreprocess, bottom, top]);
+  }, [notesPreprocess, bottom]);
 
   return (
     <div className="relative" ref={ref as Ref<HTMLDivElement>}>
