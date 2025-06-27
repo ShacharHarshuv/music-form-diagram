@@ -51,13 +51,13 @@ export function NotesSection({
 
       return {
         ...note,
-        bottom: nextNote ? nextNote.top : bottom && top ? bottom - top : null,
+        bottom: nextNote ? nextNote.top : bottom,
       };
     });
   }, [notesPreprocess, bottom]);
 
   return (
-    <div className="relative" ref={ref as Ref<HTMLDivElement>}>
+    <div className="relative h-full" ref={ref as Ref<HTMLDivElement>}>
       {notes.map((note) => (
         <Note {...note} key={note.id} />
       ))}
