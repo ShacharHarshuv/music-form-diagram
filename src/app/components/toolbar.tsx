@@ -9,7 +9,9 @@ import { redo } from "@/app/actions/redo";
 import { save } from "@/app/actions/save";
 import { undo } from "@/app/actions/undo";
 import { addNotes } from "@/app/notes/add-note";
-import { useEffect, useRef } from "react";
+import { AnimatePresence, motion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
+import { Action } from "../actions/action";
 import { current } from "../store/current";
 import { ToolButton } from "./tool-button";
 
@@ -22,23 +24,63 @@ export function Toolbar() {
     }
   }, []);
 
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  // the hook for hiding/showing buttons must be in this level so layout animations work
+  function tool(
+    action: Action,
+    ref?: React.RefObject<HTMLButtonElement | null>,
+  ) {
+    const isAvailable = action.useIsAvailable ? action.useIsAvailable() : true;
+    return (
+      <AnimatePresence mode="popLayout">
+        {isAvailable && (
+          <motion.span
+            layout
+            initial={
+              hasMounted ? { scale: 0, opacity: 0 } : { scale: 1, opacity: 1 }
+            }
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{
+              type: "spring",
+              stiffness: 400,
+              damping: 25,
+              layout: {
+                duration: 0.1,
+              },
+            }}
+          >
+            <ToolButton action={action} ref={ref} />
+          </motion.span>
+        )}
+      </AnimatePresence>
+    );
+  }
+
   return (
     <div className="bg-gray-50 border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-center gap-1 py-1">
-          <ToolButton action={newFile} /> <ToolButton action={open} />{" "}
-          <ToolButton action={save} />{" "}
+          {tool(newFile)}
+          {tool(open)}
+          {tool(save)}
           <div className="w-px h-6 bg-gray-300 mx-2" />
-          <ToolButton action={undo} />
-          <ToolButton action={redo} />
+          {tool(undo)}
+          {tool(redo)}
           <div className="w-px h-6 bg-gray-300 mx-2" />
-          <ToolButton action={addBars} ref={addButton} />
-          <ToolButton action={deleteSelected} />
-          <ToolButton action={createSection} />
+          {tool(addBars, addButton)}
+          {tool(deleteSelected)}
+          {tool(createSection)}
           {/* {moveBarsActions.map((action) => (
             <ToolButton key={action.description} action={action} />
           ))} */}
-          <ToolButton action={addNotes} />
+          {tool(addNotes)}
         </div>
       </div>
     </div>
