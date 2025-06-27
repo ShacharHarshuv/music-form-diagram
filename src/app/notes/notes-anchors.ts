@@ -32,6 +32,7 @@ export const NotesAnchors = {
   },
   // todo: remove if not needed
   useAnchor(id: string): HTMLElement | null {
+    console.log("NotesAnchors.useAnchor", id);
     const [anchor, setAnchor] = useState<HTMLElement | null>(
       anchors[id] || null,
     );
