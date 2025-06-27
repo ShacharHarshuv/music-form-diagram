@@ -224,7 +224,12 @@ export function createMusicDiagramAst(
         ({ start, end }) => start === 0 && end === currentSystem.bars.length,
       );
 
-      if (sectionThatCoversTheEntireSystem) {
+      if (
+        sectionThatCoversTheEntireSystem &&
+        sectionThatCoversTheEntireSystem.end -
+          sectionThatCoversTheEntireSystem.start >
+          4
+      ) {
         currentSystem.sections = currentSystem.sections.filter(
           ({ id }) => id !== sectionThatCoversTheEntireSystem.id,
         );
