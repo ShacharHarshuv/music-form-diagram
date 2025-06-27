@@ -2,6 +2,7 @@ import { SectionName } from "@/app/components/section-name";
 import { useSection } from "@/app/components/use-section";
 import { InlineSection as InlineSectionProps } from "@/app/music-diagram-ast/music-diagram-ast";
 import clsx from "clsx";
+import { motion } from "motion/react";
 import { useRef } from "react";
 
 export function InlineSection(props: InlineSectionProps) {
@@ -9,7 +10,13 @@ export function InlineSection(props: InlineSectionProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   return (
-    <div
+    <motion.div
+      layout
+      transition={{
+        type: "spring",
+        visualDuration: 0.1,
+        bounce: 0.2,
+      }}
       className="w-full"
       style={{
         gridColumnStart: props.start + 1,
@@ -39,6 +46,6 @@ export function InlineSection(props: InlineSectionProps) {
         }}
         onClick={selectSection}
       ></div>
-    </div>
+    </motion.div>
   );
 }
