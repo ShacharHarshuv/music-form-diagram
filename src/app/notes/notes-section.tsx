@@ -44,6 +44,8 @@ export function NotesSection({
       .sort((a, b) => a.top - b.top);
   }, [sections, anchors, mainContentRef]);
 
+  console.log(notesPreprocess);
+
   const notes = useMemo(() => {
     return notesPreprocess.map((note, index): NoteProps => {
       const nextNote = notesPreprocess[index + 1];
