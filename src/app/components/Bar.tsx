@@ -3,6 +3,7 @@ import { mutateStore } from "@/app/store/mutate-store";
 import { selectedRange } from "@/app/store/selected-range";
 import { useStore } from "@/app/store/store";
 import clsx from "clsx";
+import { motion } from "motion/react";
 import { useEffect, useState } from "react";
 
 export default function Bar(props: BarProps) {
@@ -48,7 +49,13 @@ export default function Bar(props: BarProps) {
   }, [isOneSelected, isEditing, props.content]);
 
   return (
-    <span
+    <motion.span
+      layout
+      transition={{
+        type: "spring",
+        visualDuration: 0.1,
+        bounce: 0.2,
+      }}
       className={clsx(
         "inline-block h-8 cursor-pointer border-r border-gray-300 px-2 select-none relative",
         isSelected
@@ -136,7 +143,7 @@ export default function Bar(props: BarProps) {
             ))}
         </span>
       )}
-    </span>
+    </motion.span>
   );
 }
 

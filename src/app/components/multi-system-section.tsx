@@ -4,6 +4,7 @@ import SystemSegments from "@/app/components/system-segments";
 import { useSection } from "@/app/components/use-section";
 import { MultiSystemSection as MultiSystemSectionProps } from "@/app/music-diagram-ast/music-diagram-ast";
 import clsx from "clsx";
+import { motion } from "motion/react";
 import { useRef } from "react";
 import { useNoteAnchor } from "../notes/section-anchor";
 
@@ -16,7 +17,15 @@ export default function MultiSystemSection(props: MultiSystemSectionProps) {
     useSection(props);
 
   return (
-    <div className="col-span-full grid grid-cols-subgrid">
+    <motion.div
+      layout
+      transition={{
+        type: "spring",
+        visualDuration: 0.1,
+        bounce: 0.2,
+      }}
+      className="col-span-full grid grid-cols-subgrid"
+    >
       <h2
         className={clsx(
           "group col-span-full text-lg cursor-text",
@@ -68,6 +77,6 @@ export default function MultiSystemSection(props: MultiSystemSectionProps) {
         })}
         <SystemSegments segments={props.segments} />
       </div>
-    </div>
+    </motion.div>
   );
 }
