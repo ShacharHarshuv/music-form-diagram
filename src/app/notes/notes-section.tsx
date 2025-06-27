@@ -4,7 +4,6 @@ import { useStore } from "../store/store";
 import { Note, NoteProps } from "./Note";
 import { NotesAnchors } from "./notes-anchors";
 import { useBottom } from "./positioning/bottom";
-import { getTop } from "./positioning/top";
 
 export function NotesSection({
   mainContentRef,
@@ -19,9 +18,11 @@ export function NotesSection({
   const anchors = NotesAnchors.useAnchors();
 
   const notesPreprocess = useMemo(() => {
-    if (!mainContentRef.current) {
-      return [];
-    }
+    console.log("notesPreprocess", mainContentRef.current);
+
+    // if (!mainContentRef.current) {
+    //   return [];
+    // }
 
     console.log("sections", sections);
 
@@ -39,7 +40,7 @@ export function NotesSection({
           content: s.attributes.notes,
           anchor,
           section: s,
-          top: getTop(anchor, mainContentRef.current!),
+          top: anchor.getBoundingClientRect().top,
         };
       })
       .filter((n) => n !== null)
