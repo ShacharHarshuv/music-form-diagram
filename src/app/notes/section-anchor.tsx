@@ -12,7 +12,7 @@ export function useNoteAnchor<Element extends HTMLElement>(id: string) {
     return () => {
       NotesAnchors.unregister(id);
     };
-  }, [id]);
+  }, [id, elementRef]);
 
   return elementRef;
 }
