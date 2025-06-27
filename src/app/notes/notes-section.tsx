@@ -23,6 +23,8 @@ export function NotesSection({
       return [];
     }
 
+    console.log("sections", sections);
+
     return sections
       .map((s) => {
         if (isNil(s.attributes.notes)) {
